@@ -16,7 +16,7 @@ namespace Halodi.PackageRegistry
         public bool alwaysAuth;
     }
 
-    internal class CredentialManager
+    public class CredentialManager
     {
 
         private string upmconfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".upmconfig.toml");
@@ -33,7 +33,23 @@ namespace Halodi.PackageRegistry
             }
         }
 
-        internal  CredentialManager()
+
+        public String[] Registries
+        {
+            get
+            {
+                String[] urls = new String[credentials.Count];
+                int index = 0;
+                foreach(NPMCredential cred in CredentialSet)
+                {
+                    urls[index] = cred.url;
+                    ++index;
+                }
+                return urls;
+            }
+        }
+
+        public CredentialManager()
         {
             var upmconfig = Toml.Parse(File.ReadAllText(upmconfigFile));
             if (upmconfig.HasErrors)
