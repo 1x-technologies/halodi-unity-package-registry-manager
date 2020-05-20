@@ -1,0 +1,20 @@
+{
+    "name": "com.halodi.halodi-unity-package-registry-manager.Editor",
+    "references": [
+        "com.halodi.halodi-unity-package-registry-manager.Runtime",
+        "Tomlyn"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "com.halodi.halodi-unity-package-registry-manager.Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
