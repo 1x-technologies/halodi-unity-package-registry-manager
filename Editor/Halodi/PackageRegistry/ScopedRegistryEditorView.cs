@@ -49,7 +49,7 @@ namespace Halodi.PackageRegistry
 
                 if (createNew)
                 {
-                    EditorGUILayout.LabelField("Add scoped registry ");
+                    EditorGUILayout.LabelField("Add scoped registry ", EditorStyles.whiteLargeLabel);
                     registry.name = EditorGUILayout.TextField("name: ", registry.name);
 
                     EditorGUI.BeginChangeCheck();
@@ -61,7 +61,7 @@ namespace Halodi.PackageRegistry
                 }
                 else
                 {
-                    EditorGUILayout.LabelField("Edit scoped registry");
+                    EditorGUILayout.LabelField("Edit scoped registry", EditorStyles.whiteLargeLabel);
                     EditorGUILayout.LabelField("Name: " + registry.name);
                     EditorGUILayout.LabelField("url: " + registry.url);
                 }

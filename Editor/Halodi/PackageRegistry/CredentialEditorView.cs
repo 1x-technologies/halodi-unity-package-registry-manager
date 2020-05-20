@@ -53,13 +53,13 @@ namespace Halodi.PackageRegistry
 
                 if (createNew)
                 {
-                    EditorGUILayout.LabelField("Add credential ");
+                    EditorGUILayout.LabelField("Add credential ", EditorStyles.whiteLargeLabel);
 
                     registry.url = EditorGUILayout.TextField("url: ", registry.url);
                 }
                 else
                 {
-                    EditorGUILayout.LabelField("Edit credential");
+                    EditorGUILayout.LabelField("Edit credential", EditorStyles.whiteLargeLabel);
                     EditorGUILayout.LabelField("url: " + registry.url);
                 }
 

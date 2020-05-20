@@ -11,7 +11,7 @@ namespace Halodi.PackageRegistry
         [MenuItem("Packages/Manage scoped registries", false, 21)]
         internal static void ManageRegistries()
         {
-            EditorApplication.delayCall += () => EditorWindow.GetWindow<RegistryManager>(true, "Credential Manager", true);
+            EditorApplication.delayCall += () => EditorWindow.GetWindow<RegistryManager>(true, "Registry manager", true);
         }
 
         private RegistryManagerController controller;
@@ -30,7 +30,7 @@ namespace Halodi.PackageRegistry
 
         void OnGUI()
         {
-            EditorGUILayout.LabelField("Scoped registries");
+            EditorGUILayout.LabelField("Scoped registries", EditorStyles.whiteLargeLabel);
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
 

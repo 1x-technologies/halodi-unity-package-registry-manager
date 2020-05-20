@@ -25,7 +25,7 @@ namespace Halodi.PackageRegistry
         }
         void OnGUI()
         {
-            EditorGUILayout.LabelField("Add Packages");
+            EditorGUILayout.LabelField("Add Packages", EditorStyles.whiteLargeLabel);
             EditorGUILayout.Separator();
 
             PackageList = EditorGUILayout.TextArea(PackageList, GUILayout.Height(200));

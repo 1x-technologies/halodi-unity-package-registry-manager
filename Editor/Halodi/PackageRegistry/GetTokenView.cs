@@ -34,7 +34,7 @@ namespace Halodi.PackageRegistry
         {
             if (initialized)
             {
-                EditorGUILayout.LabelField("Login to registry.");
+                EditorGUILayout.LabelField("Login to registry.", EditorStyles.whiteLargeLabel);
                 username = EditorGUILayout.TextField("Registry username: ", username);
                 password = EditorGUILayout.PasswordField("Registry password: ", password);
 

@@ -33,7 +33,7 @@ namespace Halodi.PackageRegistry
         void OnGUI()
         {
 
-            EditorGUILayout.LabelField("Credentials");
+            EditorGUILayout.LabelField("Credentials", EditorStyles.whiteLargeLabel);
             credentialScrollPos = EditorGUILayout.BeginScrollView(credentialScrollPos);
 
             foreach (NPMCredential credential in credentialManager.CredentialSet)
