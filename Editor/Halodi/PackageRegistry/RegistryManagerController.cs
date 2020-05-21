@@ -79,7 +79,8 @@ namespace Halodi.PackageRegistry
             JArray Jregistries = (JArray)manifestJSON["scopedRegistries"];
             if (Jregistries == null)
             {
-                manifestJSON["scopedRegistries"] = new JArray();
+                Jregistries = new JArray();
+                manifestJSON["scopedRegistries"] = Jregistries;
             }
 
             foreach (var JRegistryElement in Jregistries)
