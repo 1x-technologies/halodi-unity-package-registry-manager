@@ -11,7 +11,8 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "com.halodi.halodi-unity-package-registry-manager.Newtonsoft.Json.dll"
+        "com.halodi.halodi-unity-package-registry-manager.Newtonsoft.Json.dll",
+        "com.halodi.halodi-unity-package-registry-manager.ICSharpCode.SharpZipLib.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

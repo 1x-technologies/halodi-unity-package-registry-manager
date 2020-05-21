@@ -24,7 +24,7 @@ After installation a new menu "Packages" will appear.
 
 Under "Manage credential" you can add, edit and remove credentials in ~/.upmconfig.toml. 
 
-Each registry logs in using a token. If your NPM provider provides a token directly, enter it here. If your provider requires a login (aka npm login), press "Login to registry and get token". Enter "registry username" and "registry password" and press "Login". A token will be requested from the registry. The username/password will not get saved.
+Each registry logs in using a token. If your NPM provider provides a token directly, enter it here. If your provider requires a login, select the method and press "Get Token". Enter required information and press "Login". A token will be requested from the registry. The login information will not get saved.
 
 To always authenticate, set "Always auth" to true;
 
@@ -68,7 +68,7 @@ Same as "npm publish --registry [registry]" executed in "packageFolder".
 
 The publish functionality uses the credentials set in "~/.upmconfig.toml" to publish to the registry. Use "Manage registries" to set the credentials.
 
-The package tarball is created using the "UnityEditor.PackageManager.Client.Pack" function in Unity
+The package tarball is created using SharpZipLib, to avoid compatibility issues with PackageManager.Client.Pack() in Unity.
 
 Throws a System.IO.IOException if an error occurs.
 

@@ -15,8 +15,12 @@ namespace Halodi.PackageRegistry
 
         private ScopedRegistry registry;
 
+        private int tokenMethod;
         void OnEnable()
         {
+            tokenMethod = 0;
+
+            minSize = new Vector2(480, 320);
         }
 
         void OnDisable()
@@ -75,12 +79,10 @@ namespace Halodi.PackageRegistry
                 registry.auth = EditorGUILayout.Toggle("Always auth: ", registry.auth);
                 registry.token = EditorGUILayout.TextField("Token: ", registry.token);
 
+                EditorGUILayout.Space();
 
-
-                if (GUILayout.Button("Login to registry and get token"))
-                {
-                    GetTokenView.CreateWindow(registry);
-                }                
+                tokenMethod = GetTokenView.CreateGUI(tokenMethod, registry);
+      
                 
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("Tip: Restart Unity to reload credentials after saving.");
