@@ -1,5 +1,7 @@
 # Halodi Unity Package Registry Manager
 
+[![openupm](https://img.shields.io/npm/v/com.halodi.halodi-unity-package-registry-manager?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.halodi.halodi-unity-package-registry-manager/)
+
 This package provides a simple UI to edit scoped registries and set credentials.
 
 To manage package creation and publication, take a look at [Halodi Unity Package Creator  ](https://github.com/Halodi/halodi-unity-package-creator).
@@ -10,12 +12,22 @@ Apache 2.0
 
 ## Installation
 
+**via Git URL**
+
 In Unity, go to Window -> Package Manager.
 
 Add package from git url (press the + in the top left of the Window). Use the repository URL for this package:
 
 ```
 https://github.com/Halodi/halodi-unity-package-registry-manager.git
+```
+
+**via [OpenUPM](https://openupm.com/packages/com.halodi.halodi-unity-package-registry-manager/)**
+
+Requires [OpenUPM-CLI](https://github.com/openupm/openupm-cli#openupm-cli)
+
+```
+openupm add com.halodi.halodi-unity-package-registry-manager
 ```
 
 ## Usage 
