@@ -54,7 +54,7 @@ Note: The Editor will freeze while downloading the packages. This is expected. A
 
 ## Library functions
 
-This library provides basic NPM functionality in [Halodi.PackageRegistry.NPM](Runtime/Halodi/PackageRegistry/NPM.cs). The following functions are implemented
+This library provides basic NPM functionality in [Halodi.PackageRegistry.NPM](Editor/Halodi/PackageRegistry/NPM.cs). The following functions are implemented
 
 
 ### NPM.GetLoginToken(string url, string user, string password)
