@@ -4,5 +4,6 @@
   "displayName": "Halodi Unity Package Registry Manager",
   "type": "tool",
   "samples": [],
-  "description": "Simple tool to manage scoped registries and NPM credentials."
+  "description": "Simple tool to manage scoped registries and NPM credentials.",
+  "license" : "Apache-2.0"
 }
