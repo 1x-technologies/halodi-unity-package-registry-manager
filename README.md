@@ -2,6 +2,8 @@
 
 This package provides a simple UI to edit scoped registries and set credentials.
 
+To manage package creation and publication, take a look at [Halodi Unity Package Creator  ](https://github.com/Halodi/halodi-unity-package-creator).
+
 ## License
 
 Apache 2.0
