@@ -77,12 +77,8 @@ namespace Halodi.PackageRegistry
 
         private static void CreateWindow(TokenMethod method, ScopedRegistry registry)
         {
-            EditorApplication.delayCall += () =>
-            {
-                GetTokenView getTokenView = EditorWindow.GetWindow<GetTokenView>(true, "Get token", true);
-                getTokenView.SetRegistry(method, registry);
-            };
-
+            GetTokenView getTokenView = EditorWindow.GetWindow<GetTokenView>(true, "Get token", true);
+            getTokenView.SetRegistry(method, registry);
         }
 
 

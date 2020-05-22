@@ -15,7 +15,7 @@ namespace Halodi.PackageRegistry
         [MenuItem("Packages/Add packages (bulk)", false, 22)]
         internal static void ManageRegistries()
         {
-            EditorApplication.delayCall += () => EditorWindow.GetWindow<BulkAddPackages>(true, "Add packages", true);
+            EditorWindow.GetWindow<BulkAddPackages>(true, "Add packages", true);
         }
 
         void OnEnable()

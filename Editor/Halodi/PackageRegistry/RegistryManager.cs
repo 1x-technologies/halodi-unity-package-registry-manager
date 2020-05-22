@@ -11,7 +11,7 @@ namespace Halodi.PackageRegistry
         [MenuItem("Packages/Manage scoped registries", false, 21)]
         internal static void ManageRegistries()
         {
-            EditorApplication.delayCall += () => EditorWindow.GetWindow<RegistryManager>(true, "Registry manager", true);
+            EditorWindow.GetWindow<RegistryManager>(true, "Registry manager", true);
         }
 
         private RegistryManagerController controller;
@@ -81,12 +81,8 @@ namespace Halodi.PackageRegistry
 
         private void AddRegistry()
         {
-            RegistryManagerController thisController = controller;
-            EditorApplication.delayCall += () =>
-            {
-                ScopedRegistryEditorView registryEditor = EditorWindow.GetWindow<ScopedRegistryEditorView>(true, "Add registry", true);
-                registryEditor.CreateNew(thisController);
-            };
+            ScopedRegistryEditorView registryEditor = EditorWindow.GetWindow<ScopedRegistryEditorView>(true, "Add registry", true);
+            registryEditor.CreateNew(controller);
 
         }
 
@@ -98,12 +94,8 @@ namespace Halodi.PackageRegistry
 
         private void EditRegistry(ScopedRegistry registry)
         {
-            RegistryManagerController thisController = controller;
-            EditorApplication.delayCall += () =>
-            {
-                ScopedRegistryEditorView registryEditor = EditorWindow.GetWindow<ScopedRegistryEditorView>(true, "Edit registry", true);
-                registryEditor.Edit(registry, thisController);
-            };
+            ScopedRegistryEditorView registryEditor = EditorWindow.GetWindow<ScopedRegistryEditorView>(true, "Edit registry", true);
+            registryEditor.Edit(registry, controller);
         }
     }
 

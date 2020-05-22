@@ -11,7 +11,7 @@ namespace Halodi.PackageRegistry
         [MenuItem("Packages/Manage credentials", false, 20)]
         internal static void ManageCredentials()
         {
-            EditorApplication.delayCall += () => EditorWindow.GetWindow<CredentialManagerView>(true, "Credential Manager", true);
+            EditorWindow.GetWindow<CredentialManagerView>(true, "Credential Manager", true);
         }
 
         private Vector2 credentialScrollPos;
@@ -98,21 +98,15 @@ namespace Halodi.PackageRegistry
         private void EditCredential(NPMCredential credential)
         {
             CredentialManager thisManager = credentialManager;
-            EditorApplication.delayCall += () =>
-            {
-                CredentialEditorView credentialEditor = EditorWindow.GetWindow<CredentialEditorView>(true, "Edit credential", true);
-                credentialEditor.Edit(credential, thisManager);
-            };
+            CredentialEditorView credentialEditor = EditorWindow.GetWindow<CredentialEditorView>(true, "Edit credential", true);
+            credentialEditor.Edit(credential, thisManager);
         }
 
         private void AddCredential()
         {
             CredentialManager thisManager = credentialManager;
-            EditorApplication.delayCall += () =>
-            {
-                CredentialEditorView credentialEditor = EditorWindow.GetWindow<CredentialEditorView>(true, "Add credential", true);
-                credentialEditor.CreateNew(thisManager);
-            };
+            CredentialEditorView credentialEditor = EditorWindow.GetWindow<CredentialEditorView>(true, "Add credential", true);
+            credentialEditor.CreateNew(thisManager);
         }
     }
 }
