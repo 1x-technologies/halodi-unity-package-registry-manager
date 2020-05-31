@@ -34,6 +34,14 @@ To always authenticate, set "Always auth" to true;
 
 After setting the registry credentials, it is advised to restart Unity to reload the package manager.
 
+#### Notes for specific providers
+
+**Github**: Create a [Personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line), make sure "write:packages", "read:packages" and "delete:packages" are selected. Copy the personal access token directly in the "Token" field (ignore Generate Token).
+
+**Bintray**: In Generate Token, select "bintray" as method and press "Get token". Enter your credentials. Note: Your credentials are not checked here, the token is calculated from your credentials.
+
+**Verdaccio**: In Generate Token, select "npm login" as method and press "Get token". Enter your credentials.
+
 ### Manage scoped registries
 
 Using "Manage scoped registries" you can add, edit and remove scoped registries from the projects package manifest.json.
