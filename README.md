@@ -36,7 +36,7 @@ After setting the registry credentials, it is advised to restart Unity to reload
 
 #### Notes for specific providers
 
-**Github**: Create a [Personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line), make sure "write:packages", "read:packages" and "delete:packages" are selected. Copy the personal access token directly in the "Token" field (ignore Generate Token).
+**Github**: Create a [Personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line), make sure to select "read:packages" for adding packages to a project and "write:packages" if you want to publish packages. Copy the personal access token directly in the "Token" field (ignore Generate Token).
 
 **Bintray**: In Generate Token, select "bintray" as method and press "Get token". Enter your credentials. Note: Your credentials are not checked here, the token is calculated from your credentials.
 
