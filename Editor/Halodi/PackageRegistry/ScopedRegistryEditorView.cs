@@ -73,7 +73,10 @@ namespace Halodi.PackageRegistry
 
                 string scope = String.Join(",", registry.scopes);
                 scope = EditorGUILayout.TextField("Scope: ", scope);
-                registry.scopes = scope.Split(',');
+                var splitScopes = scope.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                for(int i = 0; i < splitScopes.Length; i++)
+                    splitScopes[i] = splitScopes[i].Trim();
+                registry.scopes = splitScopes;
 
 
                 registry.auth = EditorGUILayout.Toggle("Always auth: ", registry.auth);
