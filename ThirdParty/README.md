@@ -18,4 +18,4 @@ License: MIT
 ## Tomlyn
 
 https://github.com/xoofx/Tomlyn
-License: BSD-2-Clause (see Tomlyn/license.txt)
+License: BSD-2-Clause (see LICENSE.Tomlyn)
