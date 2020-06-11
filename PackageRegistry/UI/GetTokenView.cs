@@ -1,10 +1,10 @@
 using System;
+using Halodi.PackageRegistry.Core;
 using UnityEditor;
 using UnityEngine;
 
-namespace Halodi.PackageRegistry
+namespace Halodi.PackageRegistry.UI
 {
-
     internal class TokenMethod : GUIContent
     {
         internal delegate void GetToken(ScopedRegistry registry, string username, string password);
