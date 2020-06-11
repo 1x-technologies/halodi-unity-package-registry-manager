@@ -4,7 +4,7 @@ This package provides a simple UI to edit scoped registries and set credentials.
 
 To manage package creation and publication, take a look at [Halodi Unity Package Creator  ](https://github.com/Halodi/halodi-unity-package-creator).
 
-![Screenshot of main functionality](Resources/halodi-unity-package-registry-manager/halodi-unity-package-registry-manager-screenshot.png)
+![Screenshot of main functionality](Documentation~/halodi-unity-package-registry-manager-screenshot.png)
 
 ## License
 
