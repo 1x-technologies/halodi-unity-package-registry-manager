@@ -12,7 +12,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "860BB79D.Newtonsoft.Json.dll",
-        "860BB79D.SharpZipLib.dll"
+        "860BB79D.SharpZipLib.dll",
+        "Tomlyn.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
