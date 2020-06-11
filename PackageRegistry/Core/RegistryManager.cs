@@ -12,7 +12,7 @@ using UnityEngine;
 namespace Halodi.PackageRegistry.Core
 {
 
-    internal class RegistryManagerController
+    internal class RegistryManager
     {
         private string manifest = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
 
@@ -28,7 +28,7 @@ namespace Halodi.PackageRegistry.Core
             private set;
         }
 
-        internal RegistryManagerController()
+        internal RegistryManager()
         {
             this.credentialManager = new CredentialManager();
             this.registries = new List<ScopedRegistry>();

@@ -7,20 +7,20 @@ using UnityEngine;
 
 namespace Halodi.PackageRegistry.UI
 {
-    public class RegistryManager : EditorWindow
+    public class RegistryManagerView : EditorWindow
     {
         [MenuItem("Packages/Manage scoped registries", false, 21)]
         internal static void ManageRegistries()
         {
-            EditorWindow.GetWindow<RegistryManager>(true, "Registry manager", true);
+            EditorWindow.GetWindow<RegistryManagerView>(true, "Registry manager", true);
         }
 
-        private RegistryManagerController controller;
+        private RegistryManager controller;
         private Vector2 scrollPos;
 
         void OnEnable()
         {
-            controller = new RegistryManagerController();
+            controller = new RegistryManager();
             minSize = new Vector2(640, 320);
         }
 

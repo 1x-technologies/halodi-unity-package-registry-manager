@@ -10,7 +10,7 @@ namespace Halodi.PackageRegistry.UI
     {
         private bool initialized = false;
 
-        private RegistryManagerController controller;
+        private RegistryManager controller;
 
         private bool createNew;
 
@@ -29,7 +29,7 @@ namespace Halodi.PackageRegistry.UI
             initialized = false;
         }
 
-        public void CreateNew(RegistryManagerController controller)
+        public void CreateNew(RegistryManager controller)
         {
             this.controller = controller;
             this.createNew = true;
@@ -37,7 +37,7 @@ namespace Halodi.PackageRegistry.UI
             this.initialized = true;
         }
 
-        public void Edit(ScopedRegistry registry, RegistryManagerController controller)
+        public void Edit(ScopedRegistry registry, RegistryManager controller)
         {
             this.controller = controller;
             this.registry = registry;
