@@ -73,6 +73,14 @@ namespace Halodi.PackageRegistry
             return registry;
         }
 
+        private void UpdateScope(ScopedRegistry registry, JToken registryElement) {
+            JArray scopes = new JArray();
+            foreach (var scope in registry.scopes)
+            {
+                scopes.Add(scope);
+            }
+            registryElement["scopes"] = scopes;
+        }
 
         private JToken GetOrCreateScopedRegistry(ScopedRegistry registry, JObject manifestJSON)
         {
@@ -91,6 +99,7 @@ namespace Halodi.PackageRegistry
 
                     if ( String.Equals(JRegistryElement["name"].ToString(), registry.name) && String.Equals(JRegistryElement["url"].ToString(), registry.url))
                     {
+                        UpdateScope(registry, JRegistryElement);
                         return JRegistryElement;
                     };
                 }
@@ -99,13 +108,7 @@ namespace Halodi.PackageRegistry
             JObject JRegistry = new JObject();
             JRegistry["name"] = registry.name;
             JRegistry["url"] = registry.url;
-            JArray scopes = new JArray();
-            foreach (var scope in registry.scopes)
-            {
-                scopes.Add(scope);
-            }
-
-            JRegistry["scopes"] = scopes;
+            UpdateScope(registry, JRegistry);
             Jregistries.Add(JRegistry);
 
             return JRegistry;
