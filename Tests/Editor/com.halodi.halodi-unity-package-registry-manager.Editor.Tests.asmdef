@@ -1,14 +1,23 @@
 {
     "name": "com.halodi.halodi-unity-package-registry-manager.Editor.Tests",
     "references": [
-        "com.halodi.halodi-unity-package-registry-manager.Runtime",
-        "com.halodi.halodi-unity-package-registry-manager.Editor"
+        "com.halodi.halodi-unity-package-registry-manager.Editor",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
-    "optionalUnityReferences": [
-        "TestAssemblies"
-    ]
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -1,8 +1,6 @@
 {
     "name": "com.halodi.halodi-unity-package-registry-manager.Editor",
-    "references": [
-        "com.halodi.halodi-unity-package-registry-manager.Runtime"
-    ],
+    "references": [],
     "includePlatforms": [
         "Editor"
     ],
