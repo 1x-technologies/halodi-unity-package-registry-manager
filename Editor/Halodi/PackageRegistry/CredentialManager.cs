@@ -64,18 +64,21 @@ namespace Halodi.PackageRegistry
 
                 TomlTable table = upmconfig.ToModel();
 
-                TomlTable auth = (TomlTable)table["npmAuth"];
-                if (auth != null)
+                if(table != null && table.ContainsKey("npmAuth"))
                 {
-                    foreach (var registry in auth)
+                    TomlTable auth = (TomlTable)table["npmAuth"];
+                    if (auth != null)
                     {
-                        NPMCredential cred = new NPMCredential();
-                        cred.url = registry.Key;
-                        TomlTable value = (TomlTable)registry.Value;
-                        cred.token = (string)value["token"];
-                        cred.alwaysAuth = (bool)value["alwaysAuth"];
+                        foreach (var registry in auth)
+                        {
+                            NPMCredential cred = new NPMCredential();
+                            cred.url = registry.Key;
+                            TomlTable value = (TomlTable)registry.Value;
+                            cred.token = (string)value["token"];
+                            cred.alwaysAuth = (bool)value["alwaysAuth"];
 
-                        credentials.Add(cred.url, cred);
+                            credentials.Add(cred.url, cred);
+                        }
                     }
                 }
             }
