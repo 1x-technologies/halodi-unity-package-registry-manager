@@ -4,6 +4,7 @@ using UnityEditor.PackageManager.Requests;
 using UnityEditor.PackageManager;
 using System.Threading;
 using System.Collections.Generic;
+using Artees.UnitySemVer;
 
 namespace Halodi.PackageRegistry.Core
 {
@@ -51,12 +52,20 @@ namespace Halodi.PackageRegistry.Core
 
         private void AddRegistryPackage(UnityEditor.PackageManager.PackageInfo info)
         {
-            System.Version latestVersion = System.Version.Parse(GetLatestVersion(info));
-            System.Version currentVersion = System.Version.Parse(info.version);
-
-            if (currentVersion < latestVersion)
+            try
             {
-                UpgradeablePackages.Add(info);
+                
+                SemVer latestVersion = SemVer.Parse(GetLatestVersion(info));
+                SemVer currentVersion = SemVer.Parse(info.version);
+
+                if (currentVersion < latestVersion)
+                {
+                    UpgradeablePackages.Add(info);
+                }
+            }
+            catch(System.Exception e)
+            {
+                Debug.LogError("Invalid version " + info.version + " " + GetLatestVersion(info));
             }
         }
 
