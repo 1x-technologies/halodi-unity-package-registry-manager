@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Halodi.PackageRegistry.Core;
 using UnityEditor;
 using UnityEngine;
 
-namespace Halodi.PackageRegistry
+namespace Halodi.PackageRegistry.UI
 {
     public class CredentialManagerView : EditorWindow
     {

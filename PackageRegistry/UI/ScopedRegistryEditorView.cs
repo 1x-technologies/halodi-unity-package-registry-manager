@@ -1,15 +1,16 @@
 
 using System;
+using Halodi.PackageRegistry.Core;
 using UnityEditor;
 using UnityEngine;
 
-namespace Halodi.PackageRegistry
+namespace Halodi.PackageRegistry.UI
 {
     class ScopedRegistryEditorView : EditorWindow
     {
         private bool initialized = false;
 
-        private RegistryManagerController controller;
+        private RegistryManager controller;
 
         private bool createNew;
 
@@ -28,7 +29,7 @@ namespace Halodi.PackageRegistry
             initialized = false;
         }
 
-        public void CreateNew(RegistryManagerController controller)
+        public void CreateNew(RegistryManager controller)
         {
             this.controller = controller;
             this.createNew = true;
@@ -36,7 +37,7 @@ namespace Halodi.PackageRegistry
             this.initialized = true;
         }
 
-        public void Edit(ScopedRegistry registry, RegistryManagerController controller)
+        public void Edit(ScopedRegistry registry, RegistryManager controller)
         {
             this.controller = controller;
             this.registry = registry;

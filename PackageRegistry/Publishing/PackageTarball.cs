@@ -4,7 +4,7 @@ using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using Newtonsoft.Json.Linq;
 
-namespace Halodi.PackageRegistry
+namespace Halodi.PackageRegistry.Publishing
 {
 
     /// <summary>

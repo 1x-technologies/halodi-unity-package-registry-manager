@@ -10,8 +10,9 @@ using UnityEngine;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using Halodi.PackageRegistry.Core;
 
-namespace Halodi.PackageRegistry
+namespace Halodi.PackageRegistry.Publishing
 {
     /// <summary>
     /// Helper class to create the JSON data to upload to the package server

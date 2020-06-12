@@ -3,10 +3,11 @@ using System;
 using System.IO;
 using System.Net;
 using System.Text;
+using Halodi.PackageRegistry.Publishing;
 using UnityEngine;
 using Random = System.Random;
 
-namespace Halodi.PackageRegistry
+namespace Halodi.PackageRegistry.Core
 {
     [System.Serializable]
     internal class NPMLoginRequest

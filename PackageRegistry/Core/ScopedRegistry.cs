@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Halodi.PackageRegistry
+namespace Halodi.PackageRegistry.Core
 {
     [System.Serializable]
     public class ScopedRegistry

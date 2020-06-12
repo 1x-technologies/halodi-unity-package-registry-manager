@@ -7,7 +7,7 @@ using Tomlyn.Model;
 using Tomlyn.Syntax;
 using UnityEngine;
 
-namespace Halodi.PackageRegistry
+namespace Halodi.PackageRegistry.Core
 {
     internal class NPMCredential
     {
