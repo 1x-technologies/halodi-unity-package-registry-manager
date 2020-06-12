@@ -139,17 +139,20 @@ namespace Halodi.PackageRegistry.UI
                 {
                     foreach (var info in manager.UpgradeablePackages)
                     {
-                        EditorUtility.DisplayProgressBar("Upgrading packages", "Upgrading " + info.displayName, 0.5f);
+                        if(upgradeList[info])
+                        {
+                            EditorUtility.DisplayProgressBar("Upgrading packages", "Upgrading " + info.displayName, 0.5f);
 
-                        string error = "";
-                        if (manager.UpgradePackage(info, ref error))
-                        {
-                            output += "[Success] Upgraded " + info.displayName + Environment.NewLine;
-                        }
-                        else
-                        {
-                            output += "[Error] Failed upgrade of" + info.displayName + " with error: " + error + Environment.NewLine;
-                            failures = true;
+                            string error = "";
+                            if (manager.UpgradePackage(info, ref error))
+                            {
+                                output += "[Success] Upgraded " + info.displayName + Environment.NewLine;
+                            }
+                            else
+                            {
+                                output += "[Error] Failed upgrade of" + info.displayName + " with error: " + error + Environment.NewLine;
+                                failures = true;
+                            }
                         }
 
                     }

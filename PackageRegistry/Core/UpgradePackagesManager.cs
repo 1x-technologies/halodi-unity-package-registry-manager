@@ -83,9 +83,23 @@ namespace Halodi.PackageRegistry.Core
 
         internal bool UpgradePackage(UnityEditor.PackageManager.PackageInfo info, ref string error)
         {
-            string latestVersion = GetLatestVersion(info);
+            string latestVersion;
+            if(info.source == PackageSource.Git)
+            {
+                latestVersion = GetLatestVersion(info);
+            }
+            else if (info.source == PackageSource.Registry)
+            {
+                latestVersion = info.name + "@" + GetLatestVersion(info);
+            }
+            else
+            {
+                error = "Invalid source";
+                return false;
+            }
+            
 
-            AddRequest request = UnityEditor.PackageManager.Client.Add(info.packageId);
+            AddRequest request = UnityEditor.PackageManager.Client.Add(latestVersion);
 
             while (!request.IsCompleted)
             {
