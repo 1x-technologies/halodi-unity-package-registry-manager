@@ -65,7 +65,7 @@ namespace Halodi.PackageRegistry.Core
             }
             catch(System.Exception e)
             {
-                Debug.LogError("Invalid version " + info.version + " " + GetLatestVersion(info));
+                Debug.LogError("Invalid version for package " + info.displayName + ". Current: " + info.version + ", Latest: " + GetLatestVersion(info));
             }
         }
 
