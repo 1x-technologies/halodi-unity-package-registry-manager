@@ -1,5 +1,6 @@
 using System;
 using Halodi.PackageRegistry.Core;
+using Halodi.PackageRegistry.NPM;
 using UnityEditor;
 using UnityEngine;
 
@@ -84,7 +85,7 @@ namespace Halodi.PackageRegistry.UI
 
         private static void GetNPMLoginToken(ScopedRegistry registry, string username, string password)
         {
-            NPMResponse response = NPM.GetLoginToken(registry.url, username, password);
+            NPMResponse response = NPMLogin.GetLoginToken(registry.url, username, password);
 
             if (string.IsNullOrEmpty(response.ok))
             {
@@ -98,7 +99,7 @@ namespace Halodi.PackageRegistry.UI
 
         private static void GetBintrayToken(ScopedRegistry registry, string username, string password)
         {
-            registry.token = NPM.GetBintrayToken(username, password);
+            registry.token = NPMLogin.GetBintrayToken(username, password);
         }
 
 

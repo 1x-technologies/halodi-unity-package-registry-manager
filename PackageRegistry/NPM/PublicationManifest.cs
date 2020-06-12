@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Halodi.PackageRegistry.Core;
 
-namespace Halodi.PackageRegistry.Publishing
+namespace Halodi.PackageRegistry.NPM
 {
     /// <summary>
     /// Helper class to create the JSON data to upload to the package server
@@ -85,7 +85,7 @@ namespace Halodi.PackageRegistry.Publishing
             string tarballPath = name + "/-/" + tarballName;
 
 
-            string tarballUri = NPM.UrlCombine(registry, tarballPath);
+            string tarballUri = NPMLogin.UrlCombine(registry, tarballPath);
             tarballUri = Regex.Replace(tarballUri, @"^https:\/\/", "http://");
 
 
