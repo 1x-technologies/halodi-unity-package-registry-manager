@@ -5,5 +5,10 @@
   "type": "tool",
   "samples": [],
   "description": "Simple tool to manage scoped registries and NPM credentials.",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Halodi",
+    "email": "jesper@halodi.com",
+    "url": "https://halodi.com"
+  }
 }
