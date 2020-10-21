@@ -63,7 +63,7 @@ namespace Halodi.PackageRegistry.Core
                     UpgradeablePackages.Add(info);
                 }
             }
-            catch(System.Exception e)
+            catch(System.Exception)
             {
                 Debug.LogError("Invalid version for package " + info.displayName + ". Current: " + info.version + ", Latest: " + GetLatestVersion(info));
             }
