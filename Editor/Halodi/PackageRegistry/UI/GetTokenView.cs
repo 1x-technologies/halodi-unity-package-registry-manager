@@ -8,7 +8,7 @@ namespace Halodi.PackageRegistry.UI
 {
     internal class TokenMethod : GUIContent
     {
-        internal delegate void GetToken(ScopedRegistry registry, string username, string password);
+        internal delegate bool GetToken(ScopedRegistry registry, string username, string password);
         internal string usernameName;
         internal string passwordName;
         internal GetToken action;
@@ -41,6 +41,7 @@ namespace Halodi.PackageRegistry.UI
 
         void OnEnable()
         {
+            error = null;
         }
 
         void OnDisable()
@@ -65,13 +66,20 @@ namespace Halodi.PackageRegistry.UI
 
                 if (GUILayout.Button("Login"))
                 {
-                    tokenMethod.action(registry, username, password);
-                    CloseWindow();
+                    if(tokenMethod.action(registry, username, password))
+                    {
+                        CloseWindow();
+                    }
                 }
 
                 if (GUILayout.Button("Close"))
                 {
                     CloseWindow();
+                }
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    EditorGUILayout.HelpBox(error, MessageType.Error);
                 }
             }
         }
@@ -82,30 +90,35 @@ namespace Halodi.PackageRegistry.UI
             getTokenView.SetRegistry(method, registry);
         }
 
+        private static string error = null;
 
-        private static void GetNPMLoginToken(ScopedRegistry registry, string username, string password)
+        private static bool GetNPMLoginToken(ScopedRegistry registry, string username, string password)
         {
             NPMResponse response = NPMLogin.GetLoginToken(registry.url, username, password);
 
             if (string.IsNullOrEmpty(response.ok))
             {
-                EditorUtility.DisplayDialog("Cannot get token", response.error, "Ok");
+                // EditorUtility.DisplayDialog("Cannot get token", response.error, "Ok");
+                error = "Cannot get token: " + response.error;
+                return false;
             }
             else
             {
                 registry.token = response.token;
+                return true;
             }
         }
 
-        private static void GetBintrayToken(ScopedRegistry registry, string username, string password)
+        private static bool GetBintrayToken(ScopedRegistry registry, string username, string password)
         {
             registry.token = NPMLogin.GetBintrayToken(username, password);
+            return !string.IsNullOrEmpty(registry.token);
         }
 
 
         private void CloseWindow()
         {
-
+            error = null;
             Close();
             GUIUtility.ExitGUI();
         }
@@ -113,7 +126,6 @@ namespace Halodi.PackageRegistry.UI
 
         internal static int CreateGUI(int selectedIndex, ScopedRegistry registry)
         {
-
             EditorGUILayout.LabelField("Generate token", EditorStyles.whiteLargeLabel);
             EditorGUILayout.BeginHorizontal();
             selectedIndex = EditorGUILayout.Popup(new GUIContent("Method"), selectedIndex, methods);
