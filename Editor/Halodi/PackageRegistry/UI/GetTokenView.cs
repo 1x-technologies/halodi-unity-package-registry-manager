@@ -119,6 +119,10 @@ namespace Halodi.PackageRegistry.UI
         private void CloseWindow()
         {
             error = null;
+            foreach (var view in Resources.FindObjectsOfTypeAll<CredentialEditorView>())
+            {
+                view.Repaint();
+            }
             Close();
             GUIUtility.ExitGUI();
         }
