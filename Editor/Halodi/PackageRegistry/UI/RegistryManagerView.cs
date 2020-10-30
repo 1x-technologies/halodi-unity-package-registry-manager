@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Halodi.PackageRegistry.Core;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Halodi.PackageRegistry.UI
@@ -19,88 +20,61 @@ namespace Halodi.PackageRegistry.UI
             #endif
         }
 
-        private RegistryManager controller;
-        private Vector2 scrollPos;
+        private ReorderableList drawer;
 
         void OnEnable()
         {
-            controller = new RegistryManager();
+            drawer = GetRegistryListView(new RegistryManager());
             minSize = new Vector2(640, 320);
-        }
-
-        void OnDisable()
-        {
-            controller = null;
         }
 
         void OnGUI()
         {
             EditorGUILayout.LabelField("Scoped registries", EditorStyles.whiteLargeLabel);
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+            drawer.DoLayoutList();
+        }
 
-
-            foreach (ScopedRegistry registry in controller.registries)
+        internal static ReorderableList GetRegistryListView(RegistryManager registryManager)
+        {
+            ReorderableList registryList = null;
+            registryList = new ReorderableList(registryManager.registries, typeof(ScopedRegistry), false, true, true, true)
             {
-                GUIStyle boxStyle = new GUIStyle();
-                boxStyle.padding = new RectOffset(10, 10, 0, 0);
-
-                EditorGUILayout.BeginHorizontal(boxStyle);
-                EditorGUILayout.LabelField(registry.url);
-                if (GUILayout.Button("Edit"))
+                drawHeaderCallback = rect =>
                 {
-                    EditRegistry(registry);
-                    CloseWindow();
-                }
-
-                if (GUILayout.Button("Remove"))
+                    GUI.Label(rect, "Scoped Registries");
+                },
+                drawElementCallback = (rect, index, active, focused) =>
                 {
-                    Remove(registry);
-                    CloseWindow();
+                    var registry = registryList.list[index] as ScopedRegistry;
+                    if (registry == null) return;
+
+                    var rect2 = rect;
+                    rect2.width = 60;
+                    EditorGUI.ToggleLeft(rect2, "Auth", !string.IsNullOrEmpty(registry.token) && registry.isValidCredential());
+                    
+                    rect.x += 60;
+                    rect.width -= 120;
+                    EditorGUI.LabelField(rect, registry.name + ": " + registry.url);
+                    
+                    rect.x = rect.xMax;
+                    rect.width = 60;
+                    if (GUI.Button(rect, "Edit"))
+                    {
+                        ScopedRegistryEditorView registryEditor = EditorWindow.GetWindow<ScopedRegistryEditorView>(true, "Edit registry", true);
+                        registryEditor.Edit(registry, registryManager);
+                    }
+                },
+                onAddCallback = list =>
+                {
+                    ScopedRegistryEditorView registryEditor = EditorWindow.GetWindow<ScopedRegistryEditorView>(true, "Add registry", true);
+                    registryEditor.CreateNew(registryManager);
+                },
+                onRemoveCallback = list =>
+                {
+                    registryManager.Remove(registryManager.registries[list.index]);
                 }
-
-                EditorGUILayout.EndHorizontal();
-            }
-
-            EditorGUILayout.EndScrollView();
-
-            EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Add registry"))
-            { 
-                AddRegistry();
-                CloseWindow();
-            }
-
-            if (GUILayout.Button("Close"))
-            {
-                CloseWindow();
-            }
-
-            EditorGUILayout.EndHorizontal();
-
-        }
-
-        private void Remove(ScopedRegistry registry)
-        {
-            controller.Remove(registry);
-        }
-
-        private void AddRegistry()
-        {
-            ScopedRegistryEditorView registryEditor = EditorWindow.GetWindow<ScopedRegistryEditorView>(true, "Add registry", true);
-            registryEditor.CreateNew(controller);
-
-        }
-
-        private void CloseWindow()
-        {
-            Close();
-            GUIUtility.ExitGUI();
-        }
-
-        private void EditRegistry(ScopedRegistry registry)
-        {
-            ScopedRegistryEditorView registryEditor = EditorWindow.GetWindow<ScopedRegistryEditorView>(true, "Edit registry", true);
-            registryEditor.Edit(registry, controller);
+            };
+            return registryList;
         }
     }
 

@@ -50,13 +50,10 @@ namespace Halodi.PackageRegistry.UI
             this.initialized = true;
         }
 
-
         void OnGUI()
         {
             if (initialized)
             {
-
-
                 if (createNew)
                 {
                     EditorGUILayout.LabelField("Add credential", EditorStyles.whiteLargeLabel);

@@ -2,6 +2,7 @@
 using System;
 using Halodi.PackageRegistry.Core;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Halodi.PackageRegistry.UI
@@ -46,12 +47,11 @@ namespace Halodi.PackageRegistry.UI
         }
 
 
+        private ReorderableList scopeList = null;
         void OnGUI()
         {
             if (initialized)
             {
-
-
                 if (createNew)
                 {
                     EditorGUILayout.LabelField("Add scoped registry ", EditorStyles.whiteLargeLabel);
@@ -71,14 +71,26 @@ namespace Halodi.PackageRegistry.UI
                     EditorGUILayout.LabelField("url: " + registry.url);
                 }
 
+                if (scopeList == null)
+                {
+                    scopeList = new ReorderableList(registry.scopes, typeof(string), true, false, true, true)
+                    {
+                        drawHeaderCallback = rect =>
+                        { 
+                            GUI.Label(rect, "Package Scopes");
+                        },
+                        drawElementCallback = (rect, index, active, focused) =>
+                        {
+                            registry.scopes[index] = EditorGUI.TextField(rect, registry.scopes[index]);
+                        },
+                        onAddCallback = list =>
+                        {
+                            registry.scopes.Add("");
+                        }
+                    };
+                }
 
-                string scope = String.Join(",", registry.scopes);
-                scope = EditorGUILayout.TextField("Scope: ", scope);
-                var splitScopes = scope.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
-                for(int i = 0; i < splitScopes.Length; i++)
-                    splitScopes[i] = splitScopes[i].Trim();
-                registry.scopes = splitScopes;
-
+                scopeList.DoLayoutList();
 
                 registry.auth = EditorGUILayout.Toggle("Always auth: ", registry.auth);
                 registry.token = EditorGUILayout.TextField("Token: ", registry.token);
