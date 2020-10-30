@@ -68,6 +68,11 @@ namespace Halodi.PackageRegistry.UI
                     EditorGUILayout.LabelField("Edit credential", EditorStyles.whiteLargeLabel);
                     EditorGUILayout.LabelField("Registry URL: " + registry.url);
                 }
+                
+                if(string.IsNullOrEmpty(registry.url))
+                {
+                    EditorGUILayout.HelpBox("Enter the registry URL you want to add authentication for.", MessageType.Warning);
+                }
 
                 registry.auth = EditorGUILayout.Toggle("Always auth", registry.auth);
                 registry.token = EditorGUILayout.TextField("Token", registry.token);
@@ -76,6 +81,11 @@ namespace Halodi.PackageRegistry.UI
 
                 EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(registry.url));
                 tokenMethod = GetTokenView.CreateGUI(tokenMethod, registry);
+                
+                if (!string.IsNullOrEmpty(registry.url) && string.IsNullOrEmpty(registry.token))
+                {
+                    EditorGUILayout.HelpBox("Select an authentication method and click on \"Get token\"", MessageType.Warning);
+                }
                 
                 EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(registry.token));
                 EditorGUILayout.Space();
@@ -103,15 +113,6 @@ namespace Halodi.PackageRegistry.UI
                     Close();
                     GUIUtility.ExitGUI();
                 }
-
-                if(string.IsNullOrEmpty(registry.url))
-                {
-                    EditorGUILayout.HelpBox("Enter the registry URL you want to add authentication for.", MessageType.Warning);
-                }
-                else if (string.IsNullOrEmpty(registry.token))
-                {
-                    EditorGUILayout.HelpBox("Select an authentication method and click on \"Get token\"", MessageType.Warning);
-                }
                 EditorGUILayout.HelpBox("Tip: Restart Unity to reload credentials after saving.", MessageType.Info);
             }
         }
@@ -124,6 +125,12 @@ namespace Halodi.PackageRegistry.UI
                 credentialManager.Write();
                 Close();
                 GUIUtility.ExitGUI();
+                       
+                // TODO figure out in which cases a restart is actually required
+                if (EditorUtility.DisplayDialog("Unity Editor restart might be required", "The Unity editor might need to be restarted for this change to take effect.", "Restart Now", "Cancel"))
+                {
+                    EditorApplication.OpenProject(Environment.CurrentDirectory);
+                }
             }
             else
             {
