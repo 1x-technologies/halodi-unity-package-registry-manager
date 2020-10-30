@@ -123,14 +123,16 @@ namespace Halodi.PackageRegistry.UI
             {
                 credentialManager.SetCredential(registry.url, registry.auth, registry.token);
                 credentialManager.Write();
-                Close();
-                GUIUtility.ExitGUI();
-                       
-                // TODO figure out in which cases a restart is actually required
+                
+                // TODO figure out in which cases/Editor versions a restart is actually required,
+                // and where a Client.Resolve() call or PackMan reload is sufficient
                 if (EditorUtility.DisplayDialog("Unity Editor restart might be required", "The Unity editor might need to be restarted for this change to take effect.", "Restart Now", "Cancel"))
                 {
                     EditorApplication.OpenProject(Environment.CurrentDirectory);
                 }
+                
+                Close();
+                GUIUtility.ExitGUI();
             }
             else
             {
