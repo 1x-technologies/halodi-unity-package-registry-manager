@@ -9,7 +9,7 @@ namespace Halodi.PackageRegistry.Core
     {
         public string name;
         public string url;
-        public string[] scopes = new string[0];
+        public List<string> scopes = new List<string>();
 
         public bool auth;
 
@@ -47,11 +47,13 @@ namespace Halodi.PackageRegistry.Core
                 return false;
             }
 
-            if(scopes.Length < 1)
+            if(scopes.Count < 1)
             {
                 return false;
             }
 
+            scopes.RemoveAll(string.IsNullOrEmpty);
+            
             foreach(string scope in scopes)
             {
                 if(Uri.CheckHostName(scope) != UriHostNameType.Dns)
