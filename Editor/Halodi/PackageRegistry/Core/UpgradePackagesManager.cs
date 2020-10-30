@@ -19,7 +19,11 @@ namespace Halodi.PackageRegistry.Core
 
         internal UpgradePackagesManager()
         {
+#if UNITY_2019_1_OR_NEWER
             request = Client.List(false, false);
+#else
+            request = Client.List();
+#endif
         }
 
         internal void Update()
@@ -78,6 +82,8 @@ namespace Halodi.PackageRegistry.Core
             else
             {
                 string latest = "";
+                
+#if UNITY_2019_1_OR_NEWER
                 if (string.IsNullOrEmpty(info.versions.verified))
                 {
                     latest = info.versions.latestCompatible;
@@ -86,6 +92,10 @@ namespace Halodi.PackageRegistry.Core
                 {
                     latest = info.versions.verified;
                 }
+#else
+                latest = info.versions.latestCompatible;
+#endif
+                
                 return latest;
             }
         }

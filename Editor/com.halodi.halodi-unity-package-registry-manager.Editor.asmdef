@@ -1,7 +1,7 @@
 {
     "name": "com.halodi.halodi-unity-package-registry-manager.Editor",
     "references": [
-        "GUID:807287499d1ce5fd6a509eb37593f7da"
+        "Artees.SemanticVersioning"
     ],
     "includePlatforms": [
         "Editor"
