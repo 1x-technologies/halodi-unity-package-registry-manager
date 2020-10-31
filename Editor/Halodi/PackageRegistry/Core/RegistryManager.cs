@@ -122,8 +122,9 @@ namespace Halodi.PackageRegistry.Core
 
             foreach (var JRegistryElement in Jregistries)
             {
-
-                if (JRegistryElement["name"] != null && JRegistryElement["url"] != null)
+                if (JRegistryElement["name"] != null && JRegistryElement["url"] != null &&
+                JRegistryElement["url"].Value<string>().Equals(registry.url, StringComparison.Ordinal) &&
+                JRegistryElement["name"].Value<string>().Equals(registry.name, StringComparison.Ordinal))
                 {
                     JRegistryElement.Remove();
                     break;
