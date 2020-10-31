@@ -52,13 +52,14 @@ namespace Halodi.PackageRegistry.UI
         {
             if (initialized)
             {
+                EditorGUILayout.Space();
                 if (createNew)
                 {
                     EditorGUILayout.LabelField("Add scoped registry ", EditorStyles.whiteLargeLabel);
-                    registry.name = EditorGUILayout.TextField("name: ", registry.name);
+                    registry.name = EditorGUILayout.TextField("Name", registry.name);
 
                     EditorGUI.BeginChangeCheck();
-                    registry.url = EditorGUILayout.TextField("url: ", registry.url);
+                    registry.url = EditorGUILayout.TextField("URL", registry.url);
                     if (EditorGUI.EndChangeCheck())
                     {
                         UpdateCredential();
@@ -67,18 +68,14 @@ namespace Halodi.PackageRegistry.UI
                 else
                 {
                     EditorGUILayout.LabelField("Edit scoped registry", EditorStyles.whiteLargeLabel);
-                    EditorGUILayout.LabelField("Name: " + registry.name);
-                    EditorGUILayout.LabelField("url: " + registry.url);
+                    EditorGUILayout.LabelField("Name", registry.name);
+                    EditorGUILayout.LabelField("URL", registry.url);
                 }
 
                 if (scopeList == null)
                 {
                     scopeList = new ReorderableList(registry.scopes, typeof(string), true, false, true, true)
                     {
-                        drawHeaderCallback = rect =>
-                        { 
-                            GUI.Label(rect, "Package Scopes");
-                        },
                         drawElementCallback = (rect, index, active, focused) =>
                         {
                             registry.scopes[index] = EditorGUI.TextField(rect, registry.scopes[index]);
@@ -90,21 +87,29 @@ namespace Halodi.PackageRegistry.UI
                     };
                 }
 
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PrefixLabel("Package Scopes");
+                EditorGUILayout.BeginVertical();
                 scopeList.DoLayoutList();
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.EndHorizontal();
 
-                registry.auth = EditorGUILayout.Toggle("Always auth: ", registry.auth);
-                registry.token = EditorGUILayout.TextField("Token: ", registry.token);
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField("Authentication / Credentials", EditorStyles.whiteLargeLabel);
+                
+                registry.auth = EditorGUILayout.Toggle("Always auth", registry.auth);
+                registry.token = EditorGUILayout.TextField("Token", registry.token);
 
                 EditorGUILayout.Space();
 
                 tokenMethod = GetTokenView.CreateGUI(tokenMethod, registry);
-      
                 
                 EditorGUILayout.Space();
-                EditorGUILayout.LabelField("Tip: Restart Unity to reload credentials after saving.");
-
-
-
+                EditorGUILayout.BeginVertical(GUILayout.ExpandHeight(true));
+                EditorGUILayout.EndVertical();
+                
+                EditorGUILayout.HelpBox("Restart Unity to reload credentials after saving.", MessageType.Info);
+                EditorGUILayout.BeginHorizontal();
                 if (createNew)
                 {
                     if (GUILayout.Button("Add"))
@@ -119,13 +124,13 @@ namespace Halodi.PackageRegistry.UI
                         Save();
                     }
                 }
-
-
+                
                 if (GUILayout.Button("Cancel"))
                 {
                     Close();
                     GUIUtility.ExitGUI();
                 }
+                EditorGUILayout.EndHorizontal();
             }
         }
 

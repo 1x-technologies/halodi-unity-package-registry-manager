@@ -36,7 +36,7 @@ namespace Halodi.PackageRegistry.UI
             {
                 drawHeaderCallback = rect =>
                 {
-                    GUI.Label(rect, "Authenticated Registries");
+                    GUI.Label(rect, "User Credentials on this computer");
                 },
                 drawElementCallback = (rect, index, active, focused) =>
                 {
@@ -61,7 +61,7 @@ namespace Halodi.PackageRegistry.UI
                 },
                 onRemoveCallback = reorderableList =>
                 {
-                    var credential = credentialList.list[reorderableList.index] as NPMCredential;
+                    var credential = credentialList.list[credentialList.index] as NPMCredential;
                     
                     credentialManager.RemoveCredential(credential.url);
                     credentialManager.Write();

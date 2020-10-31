@@ -85,8 +85,13 @@ namespace Halodi.PackageRegistry.UI
                 }
                 
                 EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(registry.token));
+                
                 EditorGUILayout.Space();
+                EditorGUILayout.BeginVertical(GUILayout.ExpandHeight(true));
+                EditorGUILayout.EndVertical();
 
+                EditorGUILayout.HelpBox("Restart Unity to reload credentials after saving.", MessageType.Info);
+                EditorGUILayout.BeginHorizontal();
                 if (createNew)
                 {
                     if (GUILayout.Button("Add"))
@@ -110,7 +115,7 @@ namespace Halodi.PackageRegistry.UI
                     Close();
                     GUIUtility.ExitGUI();
                 }
-                EditorGUILayout.HelpBox("Tip: Restart Unity to reload credentials after saving.", MessageType.Info);
+                EditorGUILayout.EndHorizontal();
             }
         }
 
