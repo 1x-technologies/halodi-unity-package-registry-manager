@@ -11,7 +11,6 @@ using UnityEngine;
 
 namespace Halodi.PackageRegistry.Core
 {
-
     internal class RegistryManager
     {
         private string manifest = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
@@ -20,8 +19,7 @@ namespace Halodi.PackageRegistry.Core
         {
             get; private set;
         }
-
-
+        
         internal CredentialManager credentialManager
         {
             get;
@@ -42,7 +40,6 @@ namespace Halodi.PackageRegistry.Core
                 {
                     registries.Add(LoadRegistry((JObject)JRegistry));
                 }
-
             }
             else
             {
@@ -93,15 +90,12 @@ namespace Halodi.PackageRegistry.Core
 
             foreach (var JRegistryElement in Jregistries)
             {
-
-                if (JRegistryElement["name"] != null && JRegistryElement["url"] != null)
+                if (JRegistryElement["name"] != null && JRegistryElement["url"] != null &&
+                    String.Equals(JRegistryElement["name"].Value<string>(), registry.name, StringComparison.Ordinal) &&
+                    String.Equals(JRegistryElement["url" ].Value<string>(), registry.url, StringComparison.Ordinal))
                 {
-
-                    if ( String.Equals(JRegistryElement["name"].ToString(), registry.name) && String.Equals(JRegistryElement["url"].ToString(), registry.url))
-                    {
-                        UpdateScope(registry, JRegistryElement);
-                        return JRegistryElement;
-                    };
+                    UpdateScope(registry, JRegistryElement);
+                    return JRegistryElement;
                 }
             }
 
@@ -112,7 +106,6 @@ namespace Halodi.PackageRegistry.Core
             Jregistries.Add(JRegistry);
 
             return JRegistry;
-
         }
 
         internal void Remove(ScopedRegistry registry)
@@ -122,8 +115,9 @@ namespace Halodi.PackageRegistry.Core
 
             foreach (var JRegistryElement in Jregistries)
             {
-
-                if (JRegistryElement["name"] != null && JRegistryElement["url"] != null)
+                if (JRegistryElement["name"] != null && JRegistryElement["url"] != null &&
+                JRegistryElement["name"].Value<string>().Equals(registry.name, StringComparison.Ordinal) &&
+                JRegistryElement["url" ].Value<string>().Equals(registry.url, StringComparison.Ordinal))
                 {
                     JRegistryElement.Remove();
                     break;
@@ -148,11 +142,9 @@ namespace Halodi.PackageRegistry.Core
                 credentialManager.RemoveCredential(registry.url);
             }
             
-            
             write(manifestJSON);
 
             credentialManager.Write();
-
         }
 
         private void write(JObject manifestJSON)
@@ -160,6 +152,5 @@ namespace Halodi.PackageRegistry.Core
             File.WriteAllText(manifest, manifestJSON.ToString());
             AssetDatabase.Refresh();
         }
-
     }
 }
