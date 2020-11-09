@@ -33,7 +33,6 @@ namespace Halodi.PackageRegistry.UI
 
         void OnGUI()
         {
-
             EditorGUILayout.LabelField("Credentials", EditorStyles.whiteLargeLabel);
             credentialScrollPos = EditorGUILayout.BeginScrollView(credentialScrollPos);
 
