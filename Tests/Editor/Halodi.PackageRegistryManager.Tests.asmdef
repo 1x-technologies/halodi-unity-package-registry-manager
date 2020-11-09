@@ -1,9 +1,9 @@
 {
-    "name": "com.halodi.halodi-unity-package-registry-manager.Editor.Tests",
+    "name": "Halodi.PackageRegistryManager.Tests",
     "references": [
-        "com.halodi.halodi-unity-package-registry-manager.Editor",
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "UnityEditor.TestRunner",
+        "Halodi.PackageRegistryManager.Editor"
     ],
     "includePlatforms": [
         "Editor"

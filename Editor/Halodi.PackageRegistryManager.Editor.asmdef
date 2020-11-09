@@ -1,5 +1,5 @@
 {
-    "name": "com.halodi.halodi-unity-package-registry-manager.Editor",
+    "name": "Halodi.PackageRegistryManager.Editor",
     "references": [
         "Artees.SemanticVersioning"
     ],
@@ -14,7 +14,7 @@
         "Newtonsoft.Json.dll",
         "SharpZipLib.dll"
     ],
-    "autoReferenced": true,
+    "autoReferenced": false,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
