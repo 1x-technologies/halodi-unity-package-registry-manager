@@ -10,5 +10,9 @@
     "name": "Halodi",
     "email": "jesper@halodi.com",
     "url": "https://halodi.com"
+  },
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "2.0.0",
+    "com.unity.sharp-zip-lib": "1.2.2-preview.1"
   }
 }

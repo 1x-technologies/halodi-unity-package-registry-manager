@@ -10,9 +10,9 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "860BB79D.Newtonsoft.Json.dll",
-        "860BB79D.SharpZipLib.dll",
-        "860BB79D.Tomlyn.dll"
+        "860BB79D.Tomlyn.dll",
+        "Newtonsoft.Json.dll",
+        "SharpZipLib.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
