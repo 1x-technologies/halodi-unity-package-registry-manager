@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using Tomlyn;
-using Tomlyn.Model;
-using Tomlyn.Syntax;
 using UnityEditor;
 using UnityEngine;
 
@@ -58,7 +54,7 @@ namespace Halodi.PackageRegistry.Core
             {
                 scopes.Add((string)scope);
             }
-            registry.scopes = scopes.ToArray();
+            registry.scopes = new List<string>(scopes);
 
             if (credentialManager.HasRegistry(registry.url))
             {
