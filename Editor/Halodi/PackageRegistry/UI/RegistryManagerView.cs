@@ -13,11 +13,7 @@ namespace Halodi.PackageRegistry.UI
         [MenuItem("Packages/Manage scoped registries", false, 21)]
         internal static void ManageRegistries()
         {
-            #if UNITY_2020_1_OR_NEWER
             SettingsService.OpenProjectSettings("Project/Package Manager/Credentials");
-            #else
-            EditorWindow.GetWindow<RegistryManagerView>(true, "Registry manager", true);
-            #endif
         }
 
         private ReorderableList drawer;

@@ -10,11 +10,6 @@ namespace Halodi.PackageRegistry.UI
 {
     public class CredentialManagerView : EditorWindow
     {
-        [MenuItem("Packages/Manage credentials", false, 20)]
-        internal static void ManageCredentials()
-        {
-            EditorWindow.GetWindow<CredentialManagerView>(true, "Credential Manager", true);
-        }
 
         private ReorderableList drawer;
         
