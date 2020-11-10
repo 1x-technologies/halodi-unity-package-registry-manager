@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Halodi.PackageRegistry.Core
 {
-    internal class NPMCredential
+    public class NPMCredential
     {
         public string url;
         public string token;
@@ -22,7 +22,7 @@ namespace Halodi.PackageRegistry.Core
         private string upmconfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".upmconfig.toml");
         private List<NPMCredential> credentials = new List<NPMCredential>();
         
-        internal List<NPMCredential> CredentialSet
+        public List<NPMCredential> CredentialSet
         {
             get
             {
@@ -78,7 +78,7 @@ namespace Halodi.PackageRegistry.Core
             }
         }
 
-        internal void Write()
+        public void Write()
         {
             var doc = new DocumentSyntax();
 
@@ -104,17 +104,17 @@ namespace Halodi.PackageRegistry.Core
             File.WriteAllText(upmconfigFile, doc.ToString());
         }
 
-        internal bool HasRegistry(string url)
+        public bool HasRegistry(string url)
         {
             return credentials.Any(x => x.url.Equals(url, StringComparison.Ordinal));
         }
 
-        internal NPMCredential GetCredential(string url)
+        public NPMCredential GetCredential(string url)
         {
             return credentials.FirstOrDefault(x => x.url?.Equals(url, StringComparison.Ordinal) ?? false);
         }
 
-        internal void SetCredential(string url, bool alwaysAuth, string token)
+        public void SetCredential(string url, bool alwaysAuth, string token)
         {
             if (HasRegistry(url))
             {
@@ -134,7 +134,7 @@ namespace Halodi.PackageRegistry.Core
             }
         }
 
-        internal void RemoveCredential(string url)
+        public void RemoveCredential(string url)
         {
             if (HasRegistry(url))
             {
