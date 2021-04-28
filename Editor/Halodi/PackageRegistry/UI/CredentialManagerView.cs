@@ -3,110 +3,66 @@ using System.Collections;
 using System.Collections.Generic;
 using Halodi.PackageRegistry.Core;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Halodi.PackageRegistry.UI
 {
     public class CredentialManagerView : EditorWindow
     {
-        [MenuItem("Packages/Manage credentials", false, 20)]
-        internal static void ManageCredentials()
-        {
-            EditorWindow.GetWindow<CredentialManagerView>(true, "Credential Manager", true);
-        }
 
-        private Vector2 credentialScrollPos;
-
-        private CredentialManager credentialManager;
-
+        private ReorderableList drawer;
+        
         void OnEnable()
         {
-            credentialManager = new CredentialManager();
+            drawer = GetCredentialList(new CredentialManager());
             minSize = new Vector2(640, 320);
-        }
-
-
-        void OnDisable()
-        {
-            credentialManager = null;
         }
 
         void OnGUI()
         {
-            EditorGUILayout.LabelField("Credentials", EditorStyles.whiteLargeLabel);
-            credentialScrollPos = EditorGUILayout.BeginScrollView(credentialScrollPos);
+            drawer.DoLayoutList();
+        }
 
-            foreach (NPMCredential credential in credentialManager.CredentialSet)
+        internal static ReorderableList GetCredentialList(CredentialManager credentialManager)
+        {
+            ReorderableList credentialList = null;
+            credentialList = new ReorderableList(credentialManager.CredentialSet, typeof(NPMCredential), false, true, true, true)
             {
-                GUIStyle boxStyle = new GUIStyle();
-                boxStyle.padding = new RectOffset(10, 10, 0, 0);
-
-                EditorGUILayout.BeginHorizontal(boxStyle);
-                EditorGUILayout.LabelField(credential.url);
-                if (GUILayout.Button("Edit"))
+                drawHeaderCallback = rect =>
                 {
-                    EditCredential(credential);
-                    CloseWindow();
-                }
-
-                if (GUILayout.Button("Remove"))
+                    GUI.Label(rect, "User Credentials on this computer");
+                },
+                drawElementCallback = (rect, index, active, focused) =>
                 {
-                    RemoveCredential(credential);
-                    CloseWindow();
+                    var credential = credentialList.list[index] as NPMCredential;
+                    if (credential == null) return;
+                    
+                    rect.width -= 60;
+                    EditorGUI.LabelField(rect, credential.url);
+                    
+                    rect.x += rect.width;
+                    rect.width = 60;
+                    if (GUI.Button(rect, "Edit"))
+                    {
+                        CredentialEditorView credentialEditor = EditorWindow.GetWindow<CredentialEditorView>(true, "Edit credential", true);
+                        credentialEditor.Edit(credential, credentialManager);
+                    }
+                },
+                onAddCallback = reorderableList =>
+                {
+                    CredentialEditorView credentialEditor = EditorWindow.GetWindow<CredentialEditorView>(true, "Add credential", true);
+                    credentialEditor.CreateNew(credentialManager);
+                },
+                onRemoveCallback = reorderableList =>
+                {
+                    var credential = credentialList.list[credentialList.index] as NPMCredential;
+                    
+                    credentialManager.RemoveCredential(credential.url);
+                    credentialManager.Write();
                 }
-
-                EditorGUILayout.EndHorizontal();
-
-            }
-
-
-            EditorGUILayout.EndScrollView();
-
-
-
-            EditorGUILayout.BeginHorizontal();
-
-            if (GUILayout.Button("Add Credential"))
-            {
-                AddCredential();
-                CloseWindow();
-            }
-
-            if (GUILayout.Button("Close"))
-            {
-                CloseWindow();
-            }
-
-            EditorGUILayout.EndHorizontal();
-
-        }
-
-        private void CloseWindow()
-        {
-            Close();
-            GUIUtility.ExitGUI();
-        }
-
-
-
-        private void RemoveCredential(NPMCredential credential)
-        {
-            credentialManager.RemoveCredential(credential.url);
-            credentialManager.Write();
-        }
-
-        private void EditCredential(NPMCredential credential)
-        {
-            CredentialManager thisManager = credentialManager;
-            CredentialEditorView credentialEditor = EditorWindow.GetWindow<CredentialEditorView>(true, "Edit credential", true);
-            credentialEditor.Edit(credential, thisManager);
-        }
-
-        private void AddCredential()
-        {
-            CredentialManager thisManager = credentialManager;
-            CredentialEditorView credentialEditor = EditorWindow.GetWindow<CredentialEditorView>(true, "Add credential", true);
-            credentialEditor.CreateNew(thisManager);
+            };
+            return credentialList;
         }
     }
 }

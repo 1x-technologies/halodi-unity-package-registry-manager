@@ -1,32 +1,28 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using Tomlyn;
-using Tomlyn.Model;
-using Tomlyn.Syntax;
 using UnityEditor;
 using UnityEngine;
 
 namespace Halodi.PackageRegistry.Core
 {
-    internal class RegistryManager
+    public class RegistryManager
     {
         private string manifest = Path.Combine(Application.dataPath, "..", "Packages", "manifest.json");
 
-        internal List<ScopedRegistry> registries
+        public List<ScopedRegistry> registries
         {
             get; private set;
         }
         
-        internal CredentialManager credentialManager
+        public CredentialManager credentialManager
         {
             get;
             private set;
         }
 
-        internal RegistryManager()
+        public RegistryManager()
         {
             this.credentialManager = new CredentialManager();
             this.registries = new List<ScopedRegistry>();
@@ -58,7 +54,7 @@ namespace Halodi.PackageRegistry.Core
             {
                 scopes.Add((string)scope);
             }
-            registry.scopes = scopes.ToArray();
+            registry.scopes = new List<string>(scopes);
 
             if (credentialManager.HasRegistry(registry.url))
             {
@@ -108,7 +104,7 @@ namespace Halodi.PackageRegistry.Core
             return JRegistry;
         }
 
-        internal void Remove(ScopedRegistry registry)
+        public void Remove(ScopedRegistry registry)
         {
             JObject manifestJSON = JObject.Parse(File.ReadAllText(manifest));
             JArray Jregistries = (JArray)manifestJSON["scopedRegistries"];
@@ -127,7 +123,7 @@ namespace Halodi.PackageRegistry.Core
             write(manifestJSON);
         }
 
-        internal void Save(ScopedRegistry registry)
+        public void Save(ScopedRegistry registry)
         {
             JObject manifestJSON = JObject.Parse(File.ReadAllText(manifest));
 

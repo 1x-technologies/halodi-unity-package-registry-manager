@@ -8,7 +8,7 @@ using Artees.UnitySemVer;
 
 namespace Halodi.PackageRegistry.Core
 {
-    internal class UpgradePackagesManager
+    public class UpgradePackagesManager
     {
 
         public List<UnityEditor.PackageManager.PackageInfo> UpgradeablePackages = new List<UnityEditor.PackageManager.PackageInfo>();
@@ -17,7 +17,7 @@ namespace Halodi.PackageRegistry.Core
 
         public bool packagesLoaded = false;
 
-        internal UpgradePackagesManager()
+        public UpgradePackagesManager()
         {
 #if UNITY_2019_1_OR_NEWER
             request = Client.List(false, false);
@@ -26,7 +26,7 @@ namespace Halodi.PackageRegistry.Core
 #endif
         }
 
-        internal void Update()
+        public void Update()
         {
             if (!packagesLoaded && request.IsCompleted)
             {
@@ -100,7 +100,7 @@ namespace Halodi.PackageRegistry.Core
             }
         }
 
-        internal bool UpgradePackage(UnityEditor.PackageManager.PackageInfo info, ref string error)
+        public bool UpgradePackage(UnityEditor.PackageManager.PackageInfo info, ref string error)
         {
             string latestVersion;
             if(info.source == PackageSource.Git)

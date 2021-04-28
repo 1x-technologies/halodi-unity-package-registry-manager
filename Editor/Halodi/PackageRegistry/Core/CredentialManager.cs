@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Tomlyn;
 using Tomlyn.Model;
 using Tomlyn.Syntax;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace Halodi.PackageRegistry.Core
 {
-    internal class NPMCredential
+    public class NPMCredential
     {
         public string url;
         public string token;
@@ -18,21 +19,16 @@ namespace Halodi.PackageRegistry.Core
 
     public class CredentialManager
     {
-
         private string upmconfigFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".upmconfig.toml");
-
-
-        private Dictionary<string, NPMCredential> credentials = new Dictionary<string, NPMCredential>();
-
-
-        internal ICollection<NPMCredential> CredentialSet
+        private List<NPMCredential> credentials = new List<NPMCredential>();
+        
+        public List<NPMCredential> CredentialSet
         {
             get
             {
-                return credentials.Values;
+                return credentials;
             }
         }
-
 
         public String[] Registries
         {
@@ -53,14 +49,12 @@ namespace Halodi.PackageRegistry.Core
         {
             if (File.Exists(upmconfigFile))
             {
-
                 var upmconfig = Toml.Parse(File.ReadAllText(upmconfigFile));
                 if (upmconfig.HasErrors)
                 {
                     Debug.LogError("Cannot load upmconfig, invalid format");
                     return;
                 }
-
 
                 TomlTable table = upmconfig.ToModel();
 
@@ -77,18 +71,18 @@ namespace Halodi.PackageRegistry.Core
                             cred.token = (string)value["token"];
                             cred.alwaysAuth = (bool)value["alwaysAuth"];
 
-                            credentials.Add(cred.url, cred);
+                            credentials.Add(cred);
                         }
                     }
                 }
             }
         }
 
-        internal void Write()
+        public void Write()
         {
             var doc = new DocumentSyntax();
 
-            foreach (var credential in credentials.Values)
+            foreach (var credential in credentials)
             {
                 if (string.IsNullOrEmpty(credential.token))
                 {
@@ -110,23 +104,24 @@ namespace Halodi.PackageRegistry.Core
             File.WriteAllText(upmconfigFile, doc.ToString());
         }
 
-        internal bool HasRegistry(string url)
+        public bool HasRegistry(string url)
         {
-            return credentials.ContainsKey(url);
+            return credentials.Any(x => x.url.Equals(url, StringComparison.Ordinal));
         }
 
-        internal NPMCredential GetCredential(string url)
+        public NPMCredential GetCredential(string url)
         {
-            return credentials[url];
+            return credentials.FirstOrDefault(x => x.url?.Equals(url, StringComparison.Ordinal) ?? false);
         }
 
-        internal void SetCredential(string url, bool alwaysAuth, string token)
+        public void SetCredential(string url, bool alwaysAuth, string token)
         {
             if (HasRegistry(url))
             {
-                credentials[url].url = url;
-                credentials[url].alwaysAuth = alwaysAuth;
-                credentials[url].token = token;
+                var cred = GetCredential(url);
+                cred.url = url;
+                cred.alwaysAuth = alwaysAuth;
+                cred.token = token;
             }
             else
             {
@@ -135,17 +130,15 @@ namespace Halodi.PackageRegistry.Core
                 newCred.alwaysAuth = alwaysAuth;
                 newCred.token = token;
 
-                credentials.Add(url, newCred);
+                credentials.Add(newCred);
             }
-
-
         }
 
-        internal void RemoveCredential(string url)
+        public void RemoveCredential(string url)
         {
             if (HasRegistry(url))
             {
-                credentials.Remove(url);
+                credentials.RemoveAll(x => x.url.Equals(url, StringComparison.Ordinal));
             }
         }
     }
