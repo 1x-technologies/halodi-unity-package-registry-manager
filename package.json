@@ -1,7 +1,7 @@
 {
   "name": "com.halodi.halodi-unity-package-registry-manager",
   "version": "0.1.5",
-  "displayName": "Halodi Unity Package Registry Manager",
+  "displayName": "Halodi Package Registry Manager",
   "type": "tool",
   "samples": [],
   "description": "Simple tool to manage scoped registries and NPM credentials.",
