@@ -55,7 +55,7 @@ public class NPMPublish
                     try
                     {
                         NPMResponse response = JsonUtility.FromJson<NPMResponse>(responseString);
-                        if (string.IsNullOrEmpty(response.ok))
+                        if (!response.success && string.IsNullOrEmpty(response.ok))
                         {
                             throw new System.IO.IOException(responseString);
                         }
@@ -69,50 +69,7 @@ public class NPMPublish
                 }
                 catch (WebException e)
                 {
-                    if (e.Response != null)
-                    {
-                        Stream receiveStream = e.Response.GetResponseStream();
-                        // Pipes the stream to a higher level stream reader with the required encoding format.
-                        StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
-                        string responseString = readStream.ReadToEnd();
-                        e.Response.Close();
-                        readStream.Close();
-
-
-                        try
-                        {
-                            NPMResponse response = JsonUtility.FromJson<NPMResponse>(responseString);
-
-                            if (string.IsNullOrEmpty(response.error))
-                            {
-                                throw new System.IO.IOException(responseString);
-                            }
-                            else
-                            {
-                                string reason = string.IsNullOrEmpty(response.reason) ? "" : Environment.NewLine + response.reason;
-
-                                throw new System.IO.IOException(response.error + reason);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            throw new System.IO.IOException(responseString);
-                        }
-
-
-
-                    }
-                    else
-                    {
-                        if (e.InnerException != null)
-                        {
-                            throw new System.IO.IOException(e.InnerException.Message);
-                        }
-                        else
-                        {
-                            throw new System.IO.IOException(e.Message);
-                        }
-                    }
+                    throw new System.IO.IOException(WebExceptionParser.ParseWebException(e));
                 }
             }
 

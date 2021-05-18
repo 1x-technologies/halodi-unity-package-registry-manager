@@ -31,7 +31,7 @@ namespace Halodi.PackageRegistry.NPM
         }
     }
 
-    
+
     public class NPMLogin
     {
         internal static string UrlCombine(string start, string more)
@@ -61,13 +61,13 @@ namespace Halodi.PackageRegistry.NPM
                 client.Headers.Add(HttpRequestHeader.Accept, "application/json");
                 client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
                 client.Headers.Add(HttpRequestHeader.Authorization, "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(user + ":" + password)));
-                
+
                 NPMLoginRequest request = new NPMLoginRequest();
                 request.name = user;
                 request.password = password;
-                
+
                 string requestString = JsonUtility.ToJson(request);
-                
+
                 try
                 {
                     string responseString = client.UploadString(loginUri, WebRequestMethods.Http.Put, requestString);
@@ -76,32 +76,10 @@ namespace Halodi.PackageRegistry.NPM
                 }
                 catch (WebException e)
                 {
-                    if (e.Response != null)
-                    {
-                        try
-                        {
-                            Stream receiveStream = e.Response.GetResponseStream();
-                            // Pipes the stream to a higher level stream reader with the required encoding format.
-                            StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
-                            string responseString = readStream.ReadToEnd();
-                            e.Response.Close();
-                            readStream.Close();
+                    NPMResponse response = new NPMResponse();
+                    response.error = WebExceptionParser.ParseWebException(e);
+                    return response;
 
-                            return JsonUtility.FromJson<NPMResponse>(responseString);
-                        }
-                        catch (Exception e2)
-                        {
-                            NPMResponse response = new NPMResponse();
-                            response.error = e2.Message;
-                            return response;
-                        }
-                    }
-                    else
-                    {
-                        NPMResponse response = new NPMResponse();
-                        response.error = e.Message;
-                        return response;
-                    }
                 }
             }
         }
