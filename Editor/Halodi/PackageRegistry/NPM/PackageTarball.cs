@@ -75,7 +75,12 @@ namespace Halodi.PackageRegistry.NPM
                 string[] directories = Directory.GetDirectories(sourceDirectory);
                 foreach (string directory in directories)
                 {
-                    string newDirectory = directoryName + new DirectoryInfo(directory).Name + "/";
+                    string dirname = new DirectoryInfo(directory).Name;
+                    if(dirname == ".git")
+                    {
+                        continue;
+                    }
+                    string newDirectory = directoryName + dirname + "/";
                     AddDirectoryFilesToTar(tarArchive, directory, recurse, newDirectory);
                 }
             }
