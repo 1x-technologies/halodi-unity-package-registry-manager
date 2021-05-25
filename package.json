@@ -14,5 +14,12 @@
   "dependencies": {
     "com.unity.nuget.newtonsoft-json": "2.0.0",
     "com.unity.sharp-zip-lib": "1.2.2-preview.1"
+  },
+  "publishConfig": {
+    "registry": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Halodi/halodi-unity-package-registry-manager.git"
   }
 }
