@@ -5,177 +5,13 @@ using UnityEditor.PackageManager;
 using System.Threading;
 using System.Collections.Generic;
 using Artees.UnitySemVer;
-using System;
 
 namespace Halodi.PackageRegistry.Core
 {
     public class UpgradePackagesManager
     {
 
-        public class PackageUpgradeState
-        {
-            public PackageUpgradeState(UnityEditor.PackageManager.PackageInfo info)
-            {
-                this.info = info;
-                previewAvailable = false;
-                stableAvailable = false;
-                verifiedAvailable = false;
-                hasVerified = false;
-                stableVersion = SemVer.Parse(info.version);
-                previewVersion = SemVer.Parse(info.version);
-                
-
-
-                try
-                {
-                    current = SemVer.Parse(info.version);
-                }
-                catch
-                {
-                    Debug.LogError("Cannot parse version for package " + info.displayName + ": " + info.version);
-                }
-
-                if (info.source == PackageSource.Git)
-                {
-
-                    previewAvailable = true;
-                    preview = info.packageId;
-
-                    stableAvailable = true;
-                    stable = info.packageId;
-                }
-                else if (info.source == PackageSource.Registry)
-                {
-
-                    string[] compatible = info.versions.compatible;
-
-                    foreach (string ver in compatible)
-                    {
-                        try
-                        {
-                            SemVer version = SemVer.Parse(ver);
-
-                            if (string.IsNullOrWhiteSpace(version.preRelease))
-                            {
-                                if (version > stableVersion)
-                                {
-                                    stableVersion = version;
-                                    stableAvailable = true;
-                                    stable = info.name + "@" + ver;
-                                }
-                            }
-                            else
-                            {
-                                // This is a pre-release
-                                if (version > previewVersion)
-                                {
-                                    previewVersion = version;
-                                    previewAvailable = true;
-                                    preview = info.name + "@" + ver;
-                                }
-
-                            }
-                        }
-                        catch
-                        {
-                            Debug.LogError("Invalid version for package " + info.displayName + ": " + ver);
-                        }
-                    }
-                    
-                    hasVerified = !String.IsNullOrWhiteSpace(info.versions.verified);
-                    if(hasVerified)
-                    {
-                        try
-                        {
-                            verifiedVersion = SemVer.Parse(info.versions.verified);
-                            if(verifiedVersion > current)
-                            {
-                                verifiedAvailable = verifiedVersion > current;
-                                verified = info.name + "@" + info.versions.verified;
-                            }
-                            
-                        }
-                        catch
-                        {
-                            Debug.LogError("Cannot parse version for package " + info.displayName + ": " + info.versions.verified);
-                        }
-                    }
-                }
-            }
-
-            internal string GetCurrentVersion()
-            {
-                return info.packageId;
-            }
-
-            public UnityEditor.PackageManager.PackageInfo info;
-
-            private SemVer current;
-
-            private bool previewAvailable;
-            private SemVer previewVersion;
-
-            private string preview;
-
-            private bool stableAvailable;
-            private SemVer stableVersion;
-
-            private string stable;
-
-            private bool hasVerified;
-            private bool verifiedAvailable;
-            private SemVer verifiedVersion;
-            private string verified;
-
-            public bool HasNewVersion(bool showPreviewVersion, bool useVerified)
-            {
-                if(useVerified && hasVerified)
-                {
-                    return verifiedAvailable;
-                }
-                else if (showPreviewVersion)
-                {
-                    return previewAvailable || stableAvailable;
-
-                }
-                else
-                {
-                    return stableAvailable;
-                }
-            }
-
-            public string GetNewestVersion(bool showPreviewVersion, bool useVerified)
-            {
-                if(useVerified && hasVerified)
-                {
-                    if(verifiedAvailable)
-                    {
-                        return verified;
-                    }
-                }
-                else if (showPreviewVersion)
-                {
-                    if (previewAvailable)
-                    {
-                        if (!stableAvailable || previewVersion > stableVersion)
-                        {
-                            return preview;
-                        }
-                    }
-                }
-                if (stableAvailable)
-                {
-                    if (stableAvailable)
-                    {
-                        return stable;
-                    }
-                }
-
-                return null;
-            }
-        }
-
-        public List<PackageUpgradeState> UpgradeablePackages = new List<PackageUpgradeState>();
+        public List<UnityEditor.PackageManager.PackageInfo> UpgradeablePackages = new List<UnityEditor.PackageManager.PackageInfo>();
 
         private ListRequest request;
 
@@ -199,7 +35,14 @@ namespace Halodi.PackageRegistry.Core
                     PackageCollection collection = request.Result;
                     foreach (UnityEditor.PackageManager.PackageInfo info in collection)
                     {
-                        UpgradeablePackages.Add(new PackageUpgradeState(info));
+                        if (info.source == PackageSource.Git)
+                        {
+                            UpgradeablePackages.Add(info);
+                        }
+                        else if (info.source == PackageSource.Registry)
+                        {
+                            AddRegistryPackage(info);
+                        }
                     }
                 }
                 else
@@ -211,10 +54,71 @@ namespace Halodi.PackageRegistry.Core
             }
         }
 
-
-        public bool UpgradePackage(String packageWithVersion, ref string error)
+        private void AddRegistryPackage(UnityEditor.PackageManager.PackageInfo info)
         {
-            AddRequest request = UnityEditor.PackageManager.Client.Add(packageWithVersion);
+            try
+            {
+                
+                SemVer latestVersion = SemVer.Parse(GetLatestVersion(info));
+                SemVer currentVersion = SemVer.Parse(info.version);
+
+                if (currentVersion < latestVersion)
+                {
+                    UpgradeablePackages.Add(info);
+                }
+            }
+            catch(System.Exception)
+            {
+                Debug.LogError("Invalid version for package " + info.displayName + ". Current: " + info.version + ", Latest: " + GetLatestVersion(info));
+            }
+        }
+
+        public string GetLatestVersion(UnityEditor.PackageManager.PackageInfo info)
+        {
+            if (info.source == PackageSource.Git)
+            {
+                return info.packageId;
+            }
+            else
+            {
+                string latest = "";
+                
+#if UNITY_2019_1_OR_NEWER
+                if (string.IsNullOrEmpty(info.versions.verified))
+                {
+                    latest = info.versions.latestCompatible;
+                }
+                else
+                {
+                    latest = info.versions.verified;
+                }
+#else
+                latest = info.versions.latestCompatible;
+#endif
+                
+                return latest;
+            }
+        }
+
+        public bool UpgradePackage(UnityEditor.PackageManager.PackageInfo info, ref string error)
+        {
+            string latestVersion;
+            if(info.source == PackageSource.Git)
+            {
+                latestVersion = GetLatestVersion(info);
+            }
+            else if (info.source == PackageSource.Registry)
+            {
+                latestVersion = info.name + "@" + GetLatestVersion(info);
+            }
+            else
+            {
+                error = "Invalid source";
+                return false;
+            }
+            
+
+            AddRequest request = UnityEditor.PackageManager.Client.Add(latestVersion);
 
             while (!request.IsCompleted)
             {
