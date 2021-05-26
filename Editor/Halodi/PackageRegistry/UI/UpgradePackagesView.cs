@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Halodi.PackageRegistry.Core;
 using UnityEditor;
 using UnityEngine;
+using static Halodi.PackageRegistry.Core.UpgradePackagesManager;
 
 namespace Halodi.PackageRegistry.UI
 {
@@ -17,7 +18,11 @@ namespace Halodi.PackageRegistry.UI
         private UpgradePackagesManager manager;
 
         private bool upgradeAll;
-        private Dictionary<UnityEditor.PackageManager.PackageInfo, bool> upgradeList = new Dictionary<UnityEditor.PackageManager.PackageInfo, bool>();
+
+        private bool showPreviewPackages = false;
+
+        private bool useVerified = true;
+        private Dictionary<PackageUpgradeState, bool> upgradeList = new Dictionary<PackageUpgradeState, bool>();
 
         void OnEnable()
         {
@@ -34,41 +39,44 @@ namespace Halodi.PackageRegistry.UI
 
         private Vector2 scrollPos;
 
-        private void Package(UnityEditor.PackageManager.PackageInfo info)
+        private void Package(PackageUpgradeState info)
         {
 
-
-            GUIStyle boxStyle = new GUIStyle();
-            boxStyle.padding = new RectOffset(10, 10, 0, 0);
-
-            EditorGUILayout.BeginHorizontal(boxStyle);
-
-
-            EditorGUI.BeginChangeCheck();
-
-            bool upgrade = false;
-            if (upgradeList.ContainsKey(info))
+            if(info.HasNewVersion(showPreviewPackages, useVerified))
             {
-                upgrade = upgradeList[info];
-            }
 
-            upgrade = EditorGUILayout.BeginToggleGroup(info.displayName + ":" + info.version, upgrade);
-            if (EditorGUI.EndChangeCheck())
-            {
-                if (!upgrade)
+                GUIStyle boxStyle = new GUIStyle();
+                boxStyle.padding = new RectOffset(10, 10, 0, 0);
+
+                EditorGUILayout.BeginHorizontal(boxStyle);
+
+
+                EditorGUI.BeginChangeCheck();
+
+                bool upgrade = false;
+                if (upgradeList.ContainsKey(info))
                 {
-                    upgradeAll = false;
+                    upgrade = upgradeList[info];
                 }
+
+                upgrade = EditorGUILayout.BeginToggleGroup(info.GetCurrentVersion(), upgrade);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if (!upgrade)
+                    {
+                        upgradeAll = false;
+                    }
+                }
+
+                upgradeList[info] = upgrade;
+
+                EditorGUILayout.EndToggleGroup();
+
+
+                EditorGUILayout.LabelField(info.GetNewestVersion(showPreviewPackages, useVerified));
+
+                EditorGUILayout.EndHorizontal();
             }
-
-            upgradeList[info] = upgrade;
-
-            EditorGUILayout.EndToggleGroup();
-
-
-            EditorGUILayout.LabelField(manager.GetLatestVersion(info));
-
-            EditorGUILayout.EndHorizontal();
         }
 
         void OnGUI()
@@ -79,11 +87,24 @@ namespace Halodi.PackageRegistry.UI
 
                 EditorGUILayout.LabelField("Upgrade packages", EditorStyles.whiteLargeLabel);
 
+                showPreviewPackages = EditorGUILayout.ToggleLeft("Show Preview Packages", showPreviewPackages);
+
+                useVerified = EditorGUILayout.ToggleLeft("Prefer verified packages", useVerified);
+
                 if (manager.packagesLoaded)
                 {
 
                     scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
+
+
+
+                    foreach (var info in manager.UpgradeablePackages)
+                    {
+                        Package(info);
+                    }
+
+                    EditorGUILayout.EndScrollView();
 
 
                     EditorGUI.BeginChangeCheck();
@@ -95,14 +116,6 @@ namespace Halodi.PackageRegistry.UI
                             upgradeList[info] = upgradeAll;
                         }
                     }
-
-
-                    foreach (var info in manager.UpgradeablePackages)
-                    {
-                        Package(info);
-                    }
-
-                    EditorGUILayout.EndScrollView();
 
                     EditorGUILayout.BeginHorizontal();
                     if (GUILayout.Button("Upgrade"))
@@ -122,6 +135,9 @@ namespace Halodi.PackageRegistry.UI
                 {
                     EditorGUILayout.LabelField("Loading packages...", EditorStyles.whiteLargeLabel);
                 }
+
+
+
             }
         }
 
@@ -141,16 +157,16 @@ namespace Halodi.PackageRegistry.UI
                     {
                         if(upgradeList[info])
                         {
-                            EditorUtility.DisplayProgressBar("Upgrading packages", "Upgrading " + info.displayName, 0.5f);
+                            EditorUtility.DisplayProgressBar("Upgrading packages", "Upgrading " + info.info.displayName, 0.5f);
 
                             string error = "";
-                            if (manager.UpgradePackage(info, ref error))
+                            if (manager.UpgradePackage(info.GetNewestVersion(showPreviewPackages, useVerified), ref error))
                             {
-                                output += "[Success] Upgraded " + info.displayName + Environment.NewLine;
+                                output += "[Success] Upgraded " + info.info.displayName + Environment.NewLine;
                             }
                             else
                             {
-                                output += "[Error] Failed upgrade of" + info.displayName + " with error: " + error + Environment.NewLine;
+                                output += "[Error] Failed upgrade of" + info.info.displayName + " with error: " + error + Environment.NewLine;
                                 failures = true;
                             }
                         }
