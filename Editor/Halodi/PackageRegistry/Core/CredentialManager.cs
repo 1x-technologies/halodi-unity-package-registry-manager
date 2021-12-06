@@ -14,6 +14,8 @@ namespace Halodi.PackageRegistry.Core
     {
         public string url;
         public string token;
+        public string _auth;
+        public string email;
         public bool alwaysAuth;
     }
 
@@ -68,8 +70,14 @@ namespace Halodi.PackageRegistry.Core
                             NPMCredential cred = new NPMCredential();
                             cred.url = registry.Key;
                             TomlTable value = (TomlTable)registry.Value;
-                            cred.token = (string)value["token"];
-                            cred.alwaysAuth = (bool)value["alwaysAuth"];
+                            if (value.TryGetValue(nameof(NPMCredential.token), out var token))
+                                cred.token = (string) token;
+                            if (value.TryGetValue(nameof(NPMCredential._auth), out var _auth))
+                                cred._auth = (string) _auth;
+                            if (value.TryGetValue(nameof(NPMCredential.email), out var email))
+                                cred.email = (string)email;
+                            if (value.TryGetValue(nameof(NPMCredential.alwaysAuth), out var alwaysAuth))
+                                cred.alwaysAuth = (bool)alwaysAuth;
 
                             credentials.Add(cred);
                         }
@@ -89,15 +97,17 @@ namespace Halodi.PackageRegistry.Core
                     credential.token = "";
                 }
 
-                doc.Tables.Add(new TableSyntax(new KeySyntax("npmAuth", credential.url))
-                {
-                    Items =
-                    {
-                        {"token", credential.token},
-                        {"alwaysAuth", credential.alwaysAuth}
-                    }
-                });
+                var table = new TableSyntax(new KeySyntax("npmAuth", credential.url));
 
+                if(!string.IsNullOrEmpty(credential.token))
+                    table.Items.Add(nameof(NPMCredential.token), credential.token);
+                if(!string.IsNullOrEmpty(credential._auth))
+                    table.Items.Add(nameof(NPMCredential._auth), credential._auth);
+                if(!string.IsNullOrEmpty(credential.email))
+                    table.Items.Add(nameof(NPMCredential.email), credential.email);
+                table.Items.Add(nameof(NPMCredential.alwaysAuth), credential.alwaysAuth);
+
+                doc.Tables.Add(table);
             }
 
 
@@ -114,21 +124,25 @@ namespace Halodi.PackageRegistry.Core
             return credentials.FirstOrDefault(x => x.url?.Equals(url, StringComparison.Ordinal) ?? false);
         }
 
-        public void SetCredential(string url, bool alwaysAuth, string token)
+        public void SetCredential(NPMCredential inputCred)
         {
-            if (HasRegistry(url))
+            if (HasRegistry(inputCred.url))
             {
-                var cred = GetCredential(url);
-                cred.url = url;
-                cred.alwaysAuth = alwaysAuth;
-                cred.token = token;
+                var cred = GetCredential(inputCred.url);
+                cred.url = inputCred.url;
+                cred.alwaysAuth = inputCred.alwaysAuth;
+                cred.token = inputCred.token;
+                cred.email = inputCred.email;
+                cred._auth = inputCred._auth;
             }
             else
             {
                 NPMCredential newCred = new NPMCredential();
-                newCred.url = url;
-                newCred.alwaysAuth = alwaysAuth;
-                newCred.token = token;
+                newCred.url = inputCred.url;
+                newCred.alwaysAuth = inputCred.alwaysAuth;
+                newCred.token = inputCred.token;
+                newCred.email = inputCred.email;
+                newCred._auth = inputCred._auth;
 
                 credentials.Add(newCred);
             }

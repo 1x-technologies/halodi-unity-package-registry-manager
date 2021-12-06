@@ -61,6 +61,8 @@ namespace Halodi.PackageRegistry.Core
                 NPMCredential credential = credentialManager.GetCredential(registry.url);
                 registry.auth = credential.alwaysAuth;
                 registry.token = credential.token;
+                registry._auth = credential._auth;
+                registry.email = credential.email;
             }
 
             return registry;
@@ -129,9 +131,9 @@ namespace Halodi.PackageRegistry.Core
 
             JToken manifestRegistry = GetOrCreateScopedRegistry(registry, manifestJSON);
 
-            if(!string.IsNullOrEmpty(registry.token))
+            if(registry.isValidCredential())
             {
-                credentialManager.SetCredential(registry.url, registry.auth, registry.token);
+                credentialManager.SetCredential(registry.Credential);
             }
             else
             {

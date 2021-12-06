@@ -14,7 +14,18 @@ namespace Halodi.PackageRegistry.Core
         public bool auth;
 
         public string token;
+        public string _auth;
+        public string email;
 
+        public NPMCredential Credential => new NPMCredential()
+        {
+            url = url,
+            token = token,
+            _auth = _auth,
+            email = email,
+            alwaysAuth = auth
+        };
+        
         public override string ToString()
         {
             return JsonUtility.ToJson(this, true);
@@ -31,7 +42,7 @@ namespace Halodi.PackageRegistry.Core
 
             if(auth)
             {
-                if(string.IsNullOrEmpty(token))
+                if(string.IsNullOrEmpty(token) && string.IsNullOrEmpty(_auth))
                 {
                     return false;
                 }

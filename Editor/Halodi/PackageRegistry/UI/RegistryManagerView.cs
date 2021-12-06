@@ -44,7 +44,7 @@ namespace Halodi.PackageRegistry.UI
                 {
                     var registry = registryList.list[index] as ScopedRegistry;
                     if (registry == null) return;
-                    bool registryHasAuth = !string.IsNullOrEmpty(registry.token) && registry.isValidCredential();
+                    bool registryHasAuth = registry.isValidCredential();
 
                     var rect2 = rect;
                     rect.width -= 60;

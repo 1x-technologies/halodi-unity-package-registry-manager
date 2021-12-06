@@ -45,6 +45,8 @@ namespace Halodi.PackageRegistry.UI
             this.registry.url = credential.url;
             this.registry.auth = credential.alwaysAuth;
             this.registry.token = credential.token;
+            this.registry._auth = credential._auth;
+            this.registry.email = credential.email;
 
             this.createNew = false;
             this.initialized = true;
@@ -73,18 +75,20 @@ namespace Halodi.PackageRegistry.UI
 
                 registry.auth = EditorGUILayout.Toggle("Always auth", registry.auth);
                 registry.token = EditorGUILayout.TextField("Token", registry.token);
+                registry._auth = EditorGUILayout.TextField("Basic Auth", registry._auth);
+                registry.email = EditorGUILayout.TextField("Email", registry.email);
 
                 EditorGUILayout.Space();
 
                 EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(registry.url));
                 tokenMethod = GetTokenView.CreateGUI(tokenMethod, registry);
                 
-                if (!string.IsNullOrEmpty(registry.url) && string.IsNullOrEmpty(registry.token))
+                if (!string.IsNullOrEmpty(registry.url) && string.IsNullOrEmpty(registry.token) && string.IsNullOrEmpty(registry._auth))
                 {
                     EditorGUILayout.HelpBox("Select an authentication method and click on \"Get token\"", MessageType.Warning);
                 }
                 
-                EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(registry.token));
+                EditorGUI.BeginDisabledGroup(string.IsNullOrEmpty(registry.token) && string.IsNullOrEmpty(registry._auth));
                 
                 EditorGUILayout.Space();
                 EditorGUILayout.BeginVertical(GUILayout.ExpandHeight(true));
@@ -121,9 +125,9 @@ namespace Halodi.PackageRegistry.UI
 
         private void Save()
         {
-            if (registry.isValidCredential() && !string.IsNullOrEmpty(registry.token))
+            if (registry.isValidCredential())
             {
-                credentialManager.SetCredential(registry.url, registry.auth, registry.token);
+                credentialManager.SetCredential(registry.Credential);
                 credentialManager.Write();
                 
                 // TODO figure out in which cases/Editor versions a restart is actually required,

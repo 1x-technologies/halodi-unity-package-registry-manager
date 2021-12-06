@@ -99,6 +99,8 @@ namespace Halodi.PackageRegistry.UI
                 
                 registry.auth = EditorGUILayout.Toggle("Always auth", registry.auth);
                 registry.token = EditorGUILayout.TextField("Token", registry.token);
+                registry._auth = EditorGUILayout.TextField("Basic Auth", registry._auth);
+                registry.email = EditorGUILayout.TextField("Email", registry.email);
 
                 EditorGUILayout.Space();
 
