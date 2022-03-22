@@ -1,6 +1,5 @@
 {
     "name": "Halodi.PackageRegistryManager.Editor",
-    "rootNamespace": "",
     "references": [
         "Artees.SemanticVersioning"
     ],
@@ -13,7 +12,7 @@
     "precompiledReferences": [
         "860BB79D.Tomlyn.dll",
         "Newtonsoft.Json.dll",
-        "Unity.SharpZipLib.dll"
+        "SharpZipLib.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [],
