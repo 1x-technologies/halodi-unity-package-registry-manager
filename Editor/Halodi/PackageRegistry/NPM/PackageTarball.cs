@@ -1,15 +1,13 @@
-
-using System.IO;
-using ICSharpCode.SharpZipLib.GZip;
-using ICSharpCode.SharpZipLib.Tar;
 using Newtonsoft.Json.Linq;
+using System.IO;
+using Unity.SharpZipLib.GZip;
+using Unity.SharpZipLib.Tar;
 
 namespace Halodi.PackageRegistry.NPM
 {
 
     /// <summary>
     /// Tool to create tarballs for packages.
-    /// 
     /// UnityEditor.PackageManager.Client.Pack() creates a broken tarball that gets rejected by bintray.
     /// </summary>
     public class PackageTarball
@@ -76,7 +74,7 @@ namespace Halodi.PackageRegistry.NPM
                 foreach (string directory in directories)
                 {
                     string dirname = new DirectoryInfo(directory).Name;
-                    if(dirname == ".git")
+                    if (dirname == ".git")
                     {
                         continue;
                     }
