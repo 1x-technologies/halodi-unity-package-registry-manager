@@ -82,22 +82,22 @@ namespace Halodi.PackageRegistry.Core
                         }
                     }
                     
-                    hasVerified = !String.IsNullOrWhiteSpace(info.versions.verified);
+                    hasVerified = !String.IsNullOrWhiteSpace(info.versions.recommended);
                     if(hasVerified)
                     {
                         try
                         {
-                            verifiedVersion = SemVer.Parse(info.versions.verified);
+                            verifiedVersion = SemVer.Parse(info.versions.recommended);
                             if(verifiedVersion > current)
                             {
                                 verifiedAvailable = verifiedVersion > current;
-                                verified = info.name + "@" + info.versions.verified;
+                                verified = info.name + "@" + info.versions.recommended;
                             }
                             
                         }
                         catch
                         {
-                            Debug.LogError("Cannot parse version for package " + info.displayName + ": " + info.versions.verified);
+                            Debug.LogError("Cannot parse version for package " + info.displayName + ": " + info.versions.recommended);
                         }
                     }
                 }
