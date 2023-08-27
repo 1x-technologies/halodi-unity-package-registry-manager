@@ -11,9 +11,9 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
+        "860BB79D.Tomlyn.dll",
         "Newtonsoft.Json.dll",
-        "Unity.SharpZipLib.dll",
-        "Tomlyn.dll"
+        "Unity.SharpZipLib.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [],
