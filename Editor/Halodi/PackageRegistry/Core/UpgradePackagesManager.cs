@@ -82,22 +82,29 @@ namespace Halodi.PackageRegistry.Core
                         }
                     }
                     
-                    hasVerified = !String.IsNullOrWhiteSpace(info.versions.verified);
+#if UNITY_2022_2_OR_NEWER
+                    string verified = info.versions.recommended;
+#else
+                    string verified = info.versions.verified;
+#endif
+                    
+                    hasVerified = !String.IsNullOrWhiteSpace(verified);
+                    
                     if(hasVerified)
                     {
                         try
                         {
-                            verifiedVersion = SemVer.Parse(info.versions.verified);
+                            verifiedVersion = SemVer.Parse(verified);
                             if(verifiedVersion > current)
                             {
                                 verifiedAvailable = verifiedVersion > current;
-                                verified = info.name + "@" + info.versions.verified;
+                                verified = info.name + "@" + verified;
                             }
                             
                         }
                         catch
                         {
-                            Debug.LogError("Cannot parse version for package " + info.displayName + ": " + info.versions.verified);
+                            Debug.LogError("Cannot parse version for package " + info.displayName + ": " + verified);
                         }
                     }
                 }
